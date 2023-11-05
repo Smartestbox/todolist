@@ -10,7 +10,7 @@ import Task from "../Task/Task";
 import {Button} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-import styles from '../../Styles/Todolist.module.css'
+import styles from '../../styles/Todolist.module.css'
 
 
 type TodolistPropsType = {

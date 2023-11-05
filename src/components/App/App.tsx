@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react'
-import styles from '../../Styles/App.module.css'
+import styles from '../../styles/App.module.css'
 import AddItemForm from "../AddItemForm/AddItemForm";
 import Todolist from "../Todolist/Todolist";
 import {AddTodolistAC} from "../../state/todolists-reducer";

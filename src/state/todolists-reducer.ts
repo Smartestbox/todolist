@@ -1,4 +1,4 @@
-import {TasksFiltersType, TodolistType} from "../Components/App/App";
+import {TasksFiltersType, TodolistType} from "../components/App/App";
 import {v1} from "uuid";
 
 export type TodolistsActionTypes =

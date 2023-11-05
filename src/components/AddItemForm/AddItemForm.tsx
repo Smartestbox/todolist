@@ -1,7 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import TextField from "@mui/material/TextField/TextField";
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
-import styles from '../../Styles/AddItemForm.module.css'
+import styles from '../../styles/AddItemForm.module.css'
 
 export type AddItemFormType = {
     label: string

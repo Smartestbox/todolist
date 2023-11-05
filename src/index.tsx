@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css';
-import App from './Components/App/App';
+import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 import { createRoot } from 'react-dom/client';
 import {Provider} from "react-redux";

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, memo} from 'react';
-import styles from "../../Styles/App.module.css";
+import styles from "../../styles/App.module.css";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {TaskType} from "../App/App";
 import {useDispatch} from "react-redux";
