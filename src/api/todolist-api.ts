@@ -7,7 +7,7 @@ const instance = axios.create({
 
 export const todolistAPI = {
     getTodolists() {
-        return instance.get<TodolistType[]>('todo-lists')
+        return instance.get<TodolistDomainType[]>('todo-lists')
             .then(res => res.data)
     },
     createTodolist(title: string) {
@@ -15,23 +15,37 @@ export const todolistAPI = {
             'todo-lists', {title})
     },
     deleteTodolist(todolistId: string) {
-        return instance.delete<ResponseType>(
+        return instance.delete<TodolistsResponseType>(
             `todo-lists/${todolistId}`)
     },
     updateTodolist(todolistId: string, title: string) {
         return instance.put<UpdateTodolistResponseType>(
             `todo-lists/${todolistId}`, {title})
+    },
+    getTasks(todolistId: string) {
+        return instance.get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks`)
+    },
+    createTask(todolistId: string, title: string) {
+        return instance.post<TasksResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks`, {title})
+    },
+    deleteTask(todolistId: string, taskId: string) {
+      return instance.delete<TasksResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+    },
+    updateTask(todolistId: string, taskId: string, title: string) {
+        return instance.put<TasksResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, {title})
     }
 }
 
-type TodolistType = {
+// Todolist types----------------------------------
+
+export type TodolistDomainType = {
     id: string
     title: string
-    addedDate: Date
+    addedDate: string
     order: number
 }
 
-type ResponseType<D = {}> = {
+type TodolistsResponseType<D = {}> = {
     resultCode: number
     messages: string[]
     data: D
@@ -41,4 +55,33 @@ type UpdateTodolistResponseType = ResponseType & {
     fieldsErrors: string[]
 }
 
-type CreateTodolistResponseType = ResponseType<{item: TodolistType}>
+type CreateTodolistResponseType = TodolistsResponseType<{item: TodolistDomainType}>
+
+// Task types---------------------------------------
+
+
+type TaskDomainType = {
+    id: string
+    title: string
+    description: string
+    todoListId: string
+    order: number
+    status: number
+    priority: number
+    startDate: Date
+    deadline: Date
+    addedDate: Date
+}
+
+export type TasksResponseType<D = {}> = {
+    data: D
+    message: string[]
+    fieldsErrors: string[]
+    resultCode: number
+}
+
+export type GetTasksResponseType = {
+    items: TaskDomainType[]
+    totalCount: number
+    error: string
+}

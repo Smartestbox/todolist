@@ -1,6 +1,7 @@
-import {TasksType} from "../components/App/App";
 import {v1} from "uuid";
-import {AddTodolistAC, RemoveTodolistAC} from "./todolists-reducer";
+import {AddTodolistAC, RemoveTodolistAC, SetTodolistsAC} from "./todolists-reducer";
+import {TasksType} from "./tasks-reducer.test";
+import {GetTasksResponseType} from "../api/todolist-api";
 
 type TasksActionTypes =
     | ReturnType<typeof ChangeTaskStatusAC>
@@ -10,11 +11,12 @@ type TasksActionTypes =
     | ReturnType<typeof ChangeTaskTitleAC>
     | ReturnType<typeof RemoveTodolistAC>
     | ReturnType<typeof AddTodolistAC>
+    | ReturnType<typeof SetTodolistsAC>
 
 const initialState: TasksType = {}
 
-export const tasksReducer = (state: TasksType = initialState, action: TasksActionTypes) => {
-    switch(action.type) {
+export const tasksReducer = (state: TasksType = initialState, action: TasksActionTypes): TasksType => {
+    switch (action.type) {
         case 'CHANGE-TASK-STATUS':
             return {
                 ...state,
@@ -49,6 +51,13 @@ export const tasksReducer = (state: TasksType = initialState, action: TasksActio
                 ...state,
                 [action.todolistId]: []
             }
+        case 'SET-TODOLISTS': {
+            let stateCopy = state
+            action.todolists.forEach(tl => {
+                stateCopy[tl.id] = []
+            })
+            return stateCopy
+        }
         default:
             return state
     }
@@ -65,3 +74,12 @@ export const RemoveTaskAC = (todolistId: string, taskId: string) =>
 
 export const ChangeTaskTitleAC = (todolistId: string, taskId: string, title: string) =>
     ({type: 'CHANGE-TASK-TITLE', todolistId, taskId, title}) as const
+
+//------------THUNK-------------------
+
+export const SetTasksTC = (todolistId: string, tasks: GetTasksResponseType) =>
+    ({
+        type: 'SET-TASKS',
+        todolistId,
+        tasks
+    }) as const

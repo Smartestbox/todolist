@@ -4,9 +4,8 @@ import {
     AddTodolistAC, ChangeTodolistFilterAC,
     ChangeTodolistTitleAC,
     RemoveTodolistAC,
-    todolistsReducer
+    todolistsReducer, TodolistType, SetTodolistsAC
 } from "./todolists-reducer";
-import {TodolistType} from "../components/App/App";
 
 let todolistId1: string
 let todolistId2: string
@@ -19,8 +18,8 @@ beforeEach(() => {
     todolistId2 = v1()
 
     startState = [
-        {id: todolistId1, title: 'What to learn', filter: 'All'},
-        {id: todolistId2, title: 'What to buy', filter: 'All'}
+        {id: todolistId1, title: 'What to learn', filter: 'All', addedDate: '', order: 0},
+        {id: todolistId2, title: 'What to buy', filter: 'All', addedDate: '', order: 0}
     ]
 
 })
@@ -67,5 +66,15 @@ test('correct filter of todolist should be changed', () => {
 
     expect(endState[0].filter).toBe('All')
     expect(endState[1].filter).toBe('Completed')
+
+})
+
+test('todolists should be set to the state', () => {
+
+    const action: TodolistsActionTypes = SetTodolistsAC(startState)
+
+    const endState: TodolistType[] = todolistsReducer([], action)
+
+    expect(endState.length).toBe(2)
 
 })

@@ -1,12 +1,12 @@
 import React, {ChangeEvent, memo} from 'react';
 import styles from "../../styles/App.module.css";
 import EditableSpan from "../EditableSpan/EditableSpan";
-import {TaskType} from "../App/App";
 import {useDispatch} from "react-redux";
 import {ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC} from "../../state/tasks-reducer";
 import {Checkbox} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {TaskType} from "../../state/tasks-reducer.test";
 
 
 type TaskPropsType = {

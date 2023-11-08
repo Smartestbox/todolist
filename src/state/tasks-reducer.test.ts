@@ -1,6 +1,15 @@
-import {TasksType} from "../components/App/App";
 import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, tasksReducer} from "./tasks-reducer";
-import {AddTodolistAC, RemoveTodolistAC} from "./todolists-reducer";
+import {AddTodolistAC, RemoveTodolistAC, SetTodolistsAC} from "./todolists-reducer";
+
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
+
+export type TasksType = {
+    [key: string]: TaskType[]
+}
 
 let todolistId1: string
 let todolistId2: string
@@ -92,4 +101,16 @@ test('new empty array of tasks should be added', () => {
 
     expect(endState).toHaveProperty(action.todolistId, [])
 
+})
+
+test('when todolists was set, tasks with empty arrays should be added', () => {
+    const action = SetTodolistsAC([
+        {id: '1', title: 'title 1', order: 0, addedDate: ''},
+        {id: '2', title: 'title 2', order: 0, addedDate: ''}
+    ])
+
+    const endState: TasksType = tasksReducer({}, action)
+
+    expect(endState['1']).toStrictEqual([])
+    expect(endState['2']).toStrictEqual([])
 })

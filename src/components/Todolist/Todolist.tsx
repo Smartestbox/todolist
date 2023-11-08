@@ -1,16 +1,22 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useEffect} from 'react';
 import AddItemForm from "../AddItemForm/AddItemForm";
-import {TaskType, TodolistType} from "../App/App";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../state/store";
 import {AddTaskAC} from "../../state/tasks-reducer";
-import {ChangeTodolistFilterAC, ChangeTodolistTitleAC, RemoveTodolistAC} from "../../state/todolists-reducer";
+import {
+    ChangeTodolistFilterAC,
+    ChangeTodolistTitleAC,
+    RemoveTodolistAC,
+    TodolistType
+} from "../../state/todolists-reducer";
 import Task from "../Task/Task";
 import {Button} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import styles from '../../styles/Todolist.module.css'
+import {TaskType} from "../../state/tasks-reducer.test";
+import {todolistAPI} from "../../api/todolist-api";
 
 
 type TodolistPropsType = {
@@ -22,6 +28,7 @@ const Todolist: React.FC<TodolistPropsType> = memo(({todolist}) => {
     const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
 
     const dispatch = useDispatch()
+
 
     const addItemHandler = useCallback((value: string) => {
         dispatch(AddTaskAC(id, value))
