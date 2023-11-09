@@ -103,12 +103,25 @@ test('correct task status should be changed', () => {
 
 test('correct task should be added to correct todolist', () => {
 
-    const action = AddTaskAC(todolistId2, 'Jest')
+    const action = AddTaskAC({
+        addedDate: "",
+        deadline: "",
+        description: "",
+        id: "aks-232",
+        order: 0,
+        priority: TaskPriorities.Low,
+        startDate: "",
+        status: TaskStatuses.New,
+        title: "Jest",
+        todoListId: "2"
+
+    })
 
     const endState: TasksType = tasksReducer(startState, action)
 
     expect(endState[todolistId1].length).toBe(3)
     expect(endState[todolistId2].length).toBe(4)
+    expect(endState[todolistId2][0].id).toBe("aks-232")
     expect(endState[todolistId2][0].title).toBe('Jest')
 
 })

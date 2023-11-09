@@ -3,10 +3,10 @@ import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {useSelector} from "react-redux";
 import {AppRootStateType, useAppDispatch} from "../../state/store";
-import {AddTaskAC, fetchTasksTC} from "../../state/tasks-reducer";
+import {AddTaskAC, addTaskTC, fetchTasksTC} from "../../state/tasks-reducer";
 import {
     ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC,
+    ChangeTodolistTitleAC, deleteTodolistTC,
     RemoveTodolistAC,
     TodolistType
 } from "../../state/todolists-reducer";
@@ -34,11 +34,11 @@ const Todolist: React.FC<TodolistPropsType> = memo(({todolist}) => {
 
 
     const addItemHandler = useCallback((value: string) => {
-        dispatch(AddTaskAC(id, value))
+        dispatch(addTaskTC(id ,value))
     }, [dispatch])
 
     const onRemoveTodoHandler = () => {
-        dispatch(RemoveTodolistAC(id))
+        dispatch(deleteTodolistTC(id))
     }
 
     const changeTodolistTitleHandler = useCallback((title: string) => {

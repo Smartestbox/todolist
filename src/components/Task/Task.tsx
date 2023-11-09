@@ -1,12 +1,12 @@
 import React, {ChangeEvent, memo} from 'react';
 import styles from "../../styles/App.module.css";
 import EditableSpan from "../EditableSpan/EditableSpan";
-import {useDispatch} from "react-redux";
-import {ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC} from "../../state/tasks-reducer";
+import {ChangeTaskStatusAC, ChangeTaskTitleAC, deleteTaskTC, RemoveTaskAC} from "../../state/tasks-reducer";
 import {Checkbox} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {TaskDomainType, TaskStatuses} from "../../api/todolist-api";
+import {useAppDispatch} from "../../state/store";
 
 type TaskPropsType = {
     todolistId: string
@@ -14,9 +14,9 @@ type TaskPropsType = {
 }
 
 const Task: React.FC<TaskPropsType> = memo(({todolistId, task}) => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const removeTaskHandler = () => {
-        dispatch(RemoveTaskAC(todolistId, task.id))
+        dispatch(deleteTaskTC(todolistId, task.id))
     }
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
