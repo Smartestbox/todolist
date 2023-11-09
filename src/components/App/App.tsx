@@ -17,7 +17,7 @@ const App = () => {
 
     const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
 
-    const dispatch =useAppDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         dispatch(fetchTodolistsTC())

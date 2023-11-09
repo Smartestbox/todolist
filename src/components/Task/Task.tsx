@@ -6,12 +6,11 @@ import {ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC} from "../../state/t
 import {Checkbox} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {TaskType} from "../../state/tasks-reducer.test";
-
+import {TaskDomainType, TaskStatuses} from "../../api/todolist-api";
 
 type TaskPropsType = {
     todolistId: string
-    task: TaskType
+    task: TaskDomainType
 }
 
 const Task: React.FC<TaskPropsType> = memo(({todolistId, task}) => {
@@ -20,7 +19,8 @@ const Task: React.FC<TaskPropsType> = memo(({todolistId, task}) => {
         dispatch(RemoveTaskAC(todolistId, task.id))
     }
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(ChangeTaskStatusAC(todolistId, task.id, e.currentTarget.checked))
+        const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
+        dispatch(ChangeTaskStatusAC(todolistId, task.id, taskStatus))
     }
     const changeTaskTitleHandler = (taskTitle: string) => {
         dispatch(ChangeTaskTitleAC(todolistId, task.id, taskTitle))
@@ -29,7 +29,7 @@ const Task: React.FC<TaskPropsType> = memo(({todolistId, task}) => {
     return (
         <li className={styles.task}>
             <Checkbox
-                checked={task.isDone}
+                checked={task.status === TaskStatuses.Completed}
                 onChange={changeTaskStatusHandler}
             />
             <EditableSpan title={task.title} changeItemTitle={changeTaskTitleHandler}/>

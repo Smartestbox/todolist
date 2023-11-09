@@ -1,9 +1,9 @@
 import React, {memo, useCallback, useEffect} from 'react';
 import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../state/store";
-import {AddTaskAC} from "../../state/tasks-reducer";
+import {useSelector} from "react-redux";
+import {AppRootStateType, useAppDispatch} from "../../state/store";
+import {AddTaskAC, fetchTasksTC} from "../../state/tasks-reducer";
 import {
     ChangeTodolistFilterAC,
     ChangeTodolistTitleAC,
@@ -15,8 +15,7 @@ import {Button} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import styles from '../../styles/Todolist.module.css'
-import {TaskType} from "../../state/tasks-reducer.test";
-import {todolistAPI} from "../../api/todolist-api";
+import {TaskDomainType, TaskStatuses} from "../../api/todolist-api";
 
 
 type TodolistPropsType = {
@@ -25,9 +24,13 @@ type TodolistPropsType = {
 
 const Todolist: React.FC<TodolistPropsType> = memo(({todolist}) => {
     const {id, title, filter} = todolist
-    const tasks = useSelector<AppRootStateType, TaskType[]>(state => state.tasks[id])
+    const tasks = useSelector<AppRootStateType, TaskDomainType[]>(state => state.tasks[id])
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTasksTC(id))
+    }, []);
 
 
     const addItemHandler = useCallback((value: string) => {
@@ -54,11 +57,11 @@ const Todolist: React.FC<TodolistPropsType> = memo(({todolist}) => {
         dispatch(ChangeTodolistFilterAC(id, 'Completed'))
     }
 
-    const tasksForTodo: TaskType[] = filter === 'All'
+    const tasksForTodo: TaskDomainType[] = filter === 'All'
         ? tasks
         : filter === 'Completed'
-            ? tasks.filter(t => t.isDone)
-            : tasks.filter(t => !t.isDone)
+            ? tasks.filter(t => t.status === TaskStatuses.Completed)
+            : tasks.filter(t => t.status === TaskStatuses.New)
 
 
     return (

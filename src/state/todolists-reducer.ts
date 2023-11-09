@@ -50,11 +50,11 @@ export const SetTodolistsAC = (todolists: TodolistDomainType[]) =>
 
 //------------THUNK-------------------
 
-export const fetchTodolistsTC = () => {
-    return (dispatch: Dispatch) => {
+export const fetchTodolistsTC = () =>
+    (dispatch: Dispatch) => {
         todolistAPI.getTodolists()
             .then(res => {
                 dispatch(SetTodolistsAC(res))
             })
     }
-}
+

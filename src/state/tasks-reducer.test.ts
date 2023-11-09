@@ -1,15 +1,6 @@
-import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, tasksReducer} from "./tasks-reducer";
+import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, tasksReducer, TasksType} from "./tasks-reducer";
 import {AddTodolistAC, RemoveTodolistAC, SetTodolistsAC} from "./todolists-reducer";
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-
-export type TasksType = {
-    [key: string]: TaskType[]
-}
+import {TaskPriorities, TaskStatuses} from "../api/todolist-api";
 
 let todolistId1: string
 let todolistId2: string
@@ -22,27 +13,91 @@ beforeEach(() => {
 
     startState = {
         [todolistId1]: [
-            {id: '1', title: 'HTML', isDone: true},
-            {id: '2', title: 'CSS', isDone: true},
-            {id: '3', title: 'JS', isDone: false}
+            {
+                id: '1',
+                title: 'HTML',
+                status: TaskStatuses.Completed,
+                todoListId: todolistId1,
+                startDate: '',
+                description: '',
+                deadline: '',
+                addedDate: '',
+                order: 0,
+                priority: TaskPriorities.Low
+            },
+            {
+                id: '2',
+                title: 'CSS',
+                status: TaskStatuses.Completed,
+                todoListId: todolistId1,
+                startDate: '',
+                description: '',
+                deadline: '',
+                addedDate: '',
+                order: 0,
+                priority: TaskPriorities.Low
+            },
+            {
+                id: '3',
+                title: 'JS',
+                status: TaskStatuses.New,
+                todoListId: todolistId1,
+                startDate: '',
+                description: '',
+                deadline: '',
+                addedDate: '',
+                order: 0,
+                priority: TaskPriorities.Low
+            }
         ],
         [todolistId2]: [
-            {id: '1', title: 'React', isDone: true},
-            {id: '2', title: 'Redux', isDone: true},
-            {id: '3', title: 'Next.js', isDone: false}
+            {
+                id: '1',
+                title: 'React',
+                status: TaskStatuses.Completed,
+                todoListId: todolistId2,
+                startDate: '',
+                description: '',
+                deadline: '',
+                addedDate: '',
+                order: 0,
+                priority: TaskPriorities.Low
+            },
+            {
+                id: '2',
+                title: 'Redux',
+                status: TaskStatuses.Completed,
+                todoListId: todolistId2,
+                startDate: '',
+                description: '',
+                deadline: '',
+                addedDate: '',
+                order: 0,
+                priority: TaskPriorities.Low
+            },
+            {
+                id: '3',
+                title: 'Next.js',
+                status: TaskStatuses.New,
+                todoListId: todolistId2,
+                startDate: '',
+                description: '',
+                deadline: '',
+                addedDate: '',
+                order: 0,
+                priority: TaskPriorities.Low
+            }
         ]
     }
-
 })
-
 
 test('correct task status should be changed', () => {
 
-    const action = ChangeTaskStatusAC(todolistId1, '1', false)
+    const action = ChangeTaskStatusAC(todolistId1, '1', TaskStatuses.New)
 
     const endState: TasksType = tasksReducer(startState, action)
 
-    expect(endState[todolistId1][0].isDone).toBe(false)
+    expect(endState[todolistId1][0].status).toBe(TaskStatuses.New)
 
 })
 
