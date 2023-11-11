@@ -3,7 +3,7 @@ import styles from '../../styles/App.module.css'
 import AddItemForm from "../AddItemForm/AddItemForm";
 import Todolist from "../Todolist/Todolist";
 import {
-    AddTodolistAC, fetchTodolistsTC,
+    AddTodolistAC, addTodolistTC, fetchTodolistsTC,
     TodolistType
 } from "../../state/todolists-reducer";
 import {useSelector} from "react-redux";
@@ -24,8 +24,7 @@ const App = () => {
     }, [])
 
     const addTodolist = useCallback((title: string) => {
-        const action = AddTodolistAC(title)
-        dispatch(action)
+        dispatch(addTodolistTC(title))
     }, [dispatch])
 
     return (

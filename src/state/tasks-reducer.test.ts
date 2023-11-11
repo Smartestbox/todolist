@@ -1,4 +1,4 @@
-import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, tasksReducer, TasksType} from "./tasks-reducer";
+import {AddTaskAC, RemoveTaskAC, tasksReducer, TasksType, UpdateTaskAC} from "./tasks-reducer";
 import {AddTodolistAC, RemoveTodolistAC, SetTodolistsAC} from "./todolists-reducer";
 import {TaskPriorities, TaskStatuses} from "../api/todolist-api";
 
@@ -93,7 +93,18 @@ beforeEach(() => {
 
 test('correct task status should be changed', () => {
 
-    const action = ChangeTaskStatusAC(todolistId1, '1', TaskStatuses.New)
+    const action = UpdateTaskAC(todolistId1, '1', {
+        id: '1',
+        title: 'HTML',
+        status: TaskStatuses.New,
+        todoListId: todolistId1,
+        startDate: '',
+        description: '',
+        deadline: '',
+        addedDate: '',
+        order: 0,
+        priority: TaskPriorities.Low
+    })
 
     const endState: TasksType = tasksReducer(startState, action)
 
@@ -114,7 +125,6 @@ test('correct task should be added to correct todolist', () => {
         status: TaskStatuses.New,
         title: "Jest",
         todoListId: "2"
-
     })
 
     const endState: TasksType = tasksReducer(startState, action)
@@ -140,7 +150,18 @@ test('correct task should be removed from correct todolist', () => {
 
 test('correct title should be changed in correct task', () => {
 
-    const action = ChangeTaskTitleAC(todolistId2, '3', 'Nest.js')
+    const action = UpdateTaskAC(todolistId2, '3', {
+        id: '3',
+        title: 'Nest.js',
+        status: TaskStatuses.New,
+        todoListId: todolistId2,
+        startDate: '',
+        description: '',
+        deadline: '',
+        addedDate: '',
+        order: 0,
+        priority: TaskPriorities.Low
+    })
 
     const endState: TasksType = tasksReducer(startState, action)
 
@@ -163,11 +184,16 @@ test('correct array of tasks should be removed', () => {
 
 test('new empty array of tasks should be added', () => {
 
-    const action = AddTodolistAC('new title')
+    const action = AddTodolistAC({
+        id: '3' ,
+        title: 'New todolist',
+        addedDate: '',
+        order: 0,
+    })
 
     const endState: TasksType = tasksReducer(startState, action)
 
-    expect(endState).toHaveProperty(action.todolistId, [])
+    expect(endState).toHaveProperty(action.todolist.id, [])
 
 })
 

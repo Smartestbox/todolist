@@ -1,5 +1,4 @@
 import {TasksFiltersType} from "../components/App/App";
-import {v1} from "uuid";
 import {todolistAPI, TodolistDomainType} from "../api/todolist-api";
 import {Dispatch} from "redux";
 
@@ -25,7 +24,7 @@ export const todolistsReducer = (state: TodolistType[] = initialState, action: T
         case 'CHANGE-TODOLIST-TITLE':
             return state.map(tl => tl.id === action.todolistId ? {...tl, title: action.title} : tl)
         case 'ADD-TODOLIST':
-            return [...state, {id: action.todolistId, title: action.title, addedDate: '', order: 0, filter: 'All'}]
+            return [{...action.todolist, filter: 'All'}, ...state]
         case 'SET-TODOLISTS':
             return action.todolists.map(tl => ({...tl, filter: 'All'}))
         default:
@@ -42,8 +41,8 @@ export const ChangeTodolistFilterAC = (todolistId: string, filter: TasksFiltersT
 export const ChangeTodolistTitleAC = (todolistId: string, title: string) =>
     ({type: 'CHANGE-TODOLIST-TITLE', todolistId, title}) as const
 
-export const AddTodolistAC = (title: string) =>
-    ({type: 'ADD-TODOLIST', todolistId: v1(), title}) as const
+export const AddTodolistAC = (todolist: TodolistDomainType) =>
+    ({type: 'ADD-TODOLIST', todolist}) as const
 
 export const SetTodolistsAC = (todolists: TodolistDomainType[]) =>
     ({type: 'SET-TODOLISTS', todolists}) as const
@@ -63,5 +62,21 @@ export const deleteTodolistTC = (todolistId: string) =>
         todolistAPI.deleteTodolist(todolistId)
             .then(res => {
                 dispatch(RemoveTodolistAC(todolistId))
+            })
+    }
+
+export const addTodolistTC = (title: string) =>
+    (dispatch: Dispatch) => {
+        todolistAPI.createTodolist(title)
+            .then(res => {
+                dispatch(AddTodolistAC(res.data.data.item))
+            })
+    }
+
+export const changeTodolistTitleTC = (todolistId: string, title: string) =>
+    (dispatch: Dispatch) => {
+        todolistAPI.updateTodolist(todolistId, title)
+            .then(res => {
+                dispatch(ChangeTodolistTitleAC(todolistId, title))
             })
     }

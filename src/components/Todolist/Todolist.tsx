@@ -8,7 +8,7 @@ import {
     ChangeTodolistFilterAC,
     ChangeTodolistTitleAC, deleteTodolistTC,
     RemoveTodolistAC,
-    TodolistType
+    TodolistType, changeTodolistTitleTC
 } from "../../state/todolists-reducer";
 import Task from "../Task/Task";
 import {Button} from "@mui/material";
@@ -42,7 +42,7 @@ const Todolist: React.FC<TodolistPropsType> = memo(({todolist}) => {
     }
 
     const changeTodolistTitleHandler = useCallback((title: string) => {
-        dispatch(ChangeTodolistTitleAC(id, title))
+        dispatch(changeTodolistTitleTC(id, title))
     }, [dispatch, id])
 
     const onAllFilterHandler = () => {

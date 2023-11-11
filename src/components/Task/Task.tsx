@@ -1,7 +1,9 @@
 import React, {ChangeEvent, memo} from 'react';
 import styles from "../../styles/App.module.css";
 import EditableSpan from "../EditableSpan/EditableSpan";
-import {ChangeTaskStatusAC, ChangeTaskTitleAC, deleteTaskTC, RemoveTaskAC} from "../../state/tasks-reducer";
+import {
+    deleteTaskTC, updateTaskTC,
+} from "../../state/tasks-reducer";
 import {Checkbox} from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -20,10 +22,10 @@ const Task: React.FC<TaskPropsType> = memo(({todolistId, task}) => {
     }
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
-        dispatch(ChangeTaskStatusAC(todolistId, task.id, taskStatus))
+        dispatch(updateTaskTC(todolistId, task.id, {status: taskStatus}))
     }
     const changeTaskTitleHandler = (taskTitle: string) => {
-        dispatch(ChangeTaskTitleAC(todolistId, task.id, taskTitle))
+        dispatch(updateTaskTC(todolistId, task.id, {title: taskTitle}))
     }
 
     return (
