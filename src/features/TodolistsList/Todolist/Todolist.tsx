@@ -1,21 +1,21 @@
 import React, {memo, useCallback, useEffect} from 'react';
-import AddItemForm from "../AddItemForm/AddItemForm";
-import EditableSpan from "../EditableSpan/EditableSpan";
+import AddItemForm from "../../../components/AddItemForm/AddItemForm";
+import EditableSpan from "../../../components/EditableSpan/EditableSpan";
 import {useSelector} from "react-redux";
-import {AppRootStateType, useAppDispatch} from "../../state/store";
-import {AddTaskAC, addTaskTC, fetchTasksTC} from "../../state/tasks-reducer";
+import {AppRootStateType, useAppDispatch} from "../../../components/App/store";
+import {AddTaskAC, addTaskTC, fetchTasksTC} from "../tasks-reducer";
 import {
     ChangeTodolistFilterAC,
     ChangeTodolistTitleAC, deleteTodolistTC,
     RemoveTodolistAC,
     TodolistType, changeTodolistTitleTC
-} from "../../state/todolists-reducer";
+} from "../todolists-reducer";
 import Task from "../Task/Task";
 import {Button} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-import styles from '../../styles/Todolist.module.css'
-import {TaskDomainType, TaskStatuses} from "../../api/todolist-api";
+import styles from './Todolist.module.css'
+import {TaskDomainType, TaskStatuses} from "../../../api/todolist-api";
 
 
 type TodolistPropsType = {

@@ -5,6 +5,7 @@ const instance = axios.create({
     withCredentials: true
 })
 
+// api
 export const todolistAPI = {
     getTodolists() {
         return instance.get<TodolistDomainType[]>('todo-lists')
@@ -36,7 +37,7 @@ export const todolistAPI = {
     }
 }
 
-// Todolist types----------------------------------
+// Todolist types
 
 export type TodolistDomainType = {
     id: string
@@ -57,7 +58,7 @@ type UpdateTodolistResponseType = ResponseType & {
 
 type CreateTodolistResponseType = TodolistsResponseType<{item: TodolistDomainType}>
 
-// Task types---------------------------------------
+// Task types
 
 export type TaskDomainType = {
     id: string
