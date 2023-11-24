@@ -2,16 +2,20 @@ import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import TextField from "@mui/material/TextField/TextField";
 import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 import styles from './AddItemForm.module.css'
+import IconButton from "@mui/material/IconButton";
+import {AddBox} from "@mui/icons-material";
 
 export type AddItemFormType = {
     label: string
     addItem: (title: string) => void
     fullWidth?: boolean
+    disabled?: boolean
 }
 
 const AddItemForm: React.FC<AddItemFormType> = memo(({
                                                          label,
-                                                         addItem
+                                                         addItem,
+                                                         disabled
                                                      }) => {
     const [value, setValue] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
@@ -46,24 +50,23 @@ const AddItemForm: React.FC<AddItemFormType> = memo(({
         if (error) setError(false)
     }
 
-    return <div>
-        <div>
-            {
-                <TextField
-                    label={error ? 'Title is required' : label}
-                    variant='outlined'
-                    onChange={onChangeHandler}
-                    onKeyUp={onKeyPressHandler}
-                    onBlur={onBlurHandler}
-                    value={value}
-                    error={error}
-                />
-            }
-            <AddBoxOutlinedIcon onClick={onClickHandler} fontSize='large' color='primary'
-                                sx={{'&:hover': {'cursor': 'pointer'}}}/>
+    return (
+        <div className={styles.form}>
+            <TextField
+                label={error ? 'Title is required' : label}
+                variant='outlined'
+                onChange={onChangeHandler}
+                onKeyUp={onKeyPressHandler}
+                onBlur={onBlurHandler}
+                value={value}
+                error={error}
+                disabled={disabled}
+            />
+            <IconButton onClick={onClickHandler} size='large' color='primary' disabled={disabled}>
+                <AddBox />
+            </IconButton>
         </div>
-    </div>
-
+    )
 })
 
 export default AddItemForm;

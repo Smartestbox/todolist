@@ -38,28 +38,23 @@ export const todolistAPI = {
 }
 
 // Todolist types
-
 export type TodolistDomainType = {
     id: string
     title: string
     addedDate: string
     order: number
 }
-
 type TodolistsResponseType<D = {}> = {
     resultCode: number
     messages: string[]
     data: D
 }
-
 type UpdateTodolistResponseType = ResponseType & {
     fieldsErrors: string[]
 }
-
 type CreateTodolistResponseType = TodolistsResponseType<{item: TodolistDomainType}>
 
 // Task types
-
 export type TaskDomainType = {
     id: string
     title: string
@@ -68,31 +63,27 @@ export type TaskDomainType = {
     order: number
     status: TaskStatuses
     priority: TaskPriorities
-    startDate: ''
-    deadline: ''
-    addedDate: ''
+    startDate: string
+    deadline: string
+    addedDate: string
 }
-
 export type TasksResponseType<D = {}> = {
     data: D
-    message: string[]
+    messages: string[]
     fieldsErrors: string[]
     resultCode: number
 }
-
 export type GetTasksResponseType = {
     items: TaskDomainType[]
     totalCount: number
     error: string
 }
-
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
-
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,

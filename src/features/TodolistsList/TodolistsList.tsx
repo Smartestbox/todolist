@@ -1,13 +1,13 @@
 import React, {useEffect} from "react";
 import {useSelector} from "react-redux";
-import {AppRootStateType, useAppDispatch} from "../../components/App/store";
+import {RootStateType, useAppDispatch} from "../../components/App/store";
 import {fetchTodolistsTC, TodolistType} from "./todolists-reducer";
 import Grid from "@mui/material/Grid";
 import {Paper} from "@mui/material";
 import Todolist from "./Todolist/Todolist";
 
 const TodolistsList: React.FC = () => {
-    const todolists = useSelector<AppRootStateType, TodolistType[]>(state => state.todolists)
+    const todolists = useSelector<RootStateType, TodolistType[]>(state => state.todolists)
 
     const dispatch = useAppDispatch()
 
@@ -23,6 +23,7 @@ const TodolistsList: React.FC = () => {
                         <Paper elevation={3} sx={{padding: '20px'}}>
                             <Todolist
                                 todolist={tl}
+                                entityStatus={tl.entityStatus}
                             />
                         </Paper>
                     </Grid>
