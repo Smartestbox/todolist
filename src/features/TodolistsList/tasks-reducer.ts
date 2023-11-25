@@ -1,8 +1,8 @@
 import {addTodolistAC, deleteTodolistAC, setTodolistsAC} from "./todolists-reducer";
-import {TaskDomainType, TaskPriorities, TaskStatuses, todolistAPI} from "../../api/todolist-api";
+import {RESULT_CODE, TaskDomainType, TaskPriorities, TaskStatuses, todolistAPI} from "../../api/todolist-api";
 import {AppThunk} from "../../components/App/store";
-import {AppStatusesType, setAppErrorAC, setAppStatusAC} from "../../components/App/app-reducer";
-import {string} from "prop-types";
+import {AppStatusesType, setAppStatusAC} from "../../components/App/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
 const initialState: TasksType = {}
 
@@ -83,8 +83,8 @@ export const fetchTasksTC = (todolistId: string): AppThunk =>
             const res = await todolistAPI.getTasks(todolistId)
             dispatch(setTasksAC(todolistId, res.data.items))
             dispatch(setAppStatusAC('completed'))
-        } catch (e) {
-            console.warn(e)
+        } catch (e: any) {
+            handleServerNetworkError(dispatch, e)
         }
     }
 export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk =>
@@ -92,13 +92,16 @@ export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk =>
         try {
             dispatch(setAppStatusAC('loading'))
             dispatch(setTaskEntityStatusAC(todolistId, taskId, 'loading'))
-            await todolistAPI.deleteTask(todolistId, taskId)
-            dispatch(deleteTaskAC(todolistId, taskId))
-            dispatch(setAppStatusAC('completed'))
+            const res = await todolistAPI.deleteTask(todolistId, taskId) // ---------CHANGE TO resultCode LOGIC----------
+            if(res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+                dispatch(deleteTaskAC(todolistId, taskId))
+                dispatch(setAppStatusAC('completed'))
+            } else {
+                handleServerAppError<{}>(dispatch, res.data)
+            }
         } catch (e: any) {
             dispatch(setTaskEntityStatusAC(todolistId,  taskId, 'idle'))
-            dispatch(setAppErrorAC(e.message))
-            dispatch(setAppStatusAC('failed'))
+            handleServerNetworkError(dispatch, e)
         }
     }
 export const addTaskTC = (todolistId: string, title: string): AppThunk =>
@@ -106,17 +109,15 @@ export const addTaskTC = (todolistId: string, title: string): AppThunk =>
         dispatch(setAppStatusAC('loading'))
         todolistAPI.createTask(todolistId, title)
             .then(res => {
-                if (res.data.resultCode === 0) {
+                if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
                     dispatch(addTaskAC(res.data.data.item))
                     dispatch(setAppStatusAC('completed'))
                 } else {
-                    if (res.data.messages.length) {
-                        dispatch(setAppErrorAC(res.data.messages[0]))
-                    } else {
-                        dispatch(setAppErrorAC('unknown error has occurred'))
-                    }
-                    dispatch(setAppStatusAC('failed'))
+                    handleServerAppError<{item: TaskDomainType}>(dispatch, res.data)
                 }
+            })
+            .catch(e => {
+                handleServerNetworkError(dispatch, e)
             })
     }
 export const updateTaskTC = (
@@ -148,16 +149,10 @@ export const updateTaskTC = (
                 dispatch(updateTaskAC(todolistId, taskId, taskForUpdate))
                 dispatch(setTaskEntityStatusAC(todolistId, taskId, 'completed'))
             } else {
-                if (res.data.messages.length) {
-                    setAppErrorAC(res.data.messages[0])
-                } else {
-                    setAppErrorAC('unknown error was occurred')
-                }
+                handleServerAppError<{item: TaskDomainType}>(dispatch, res.data)
             }
-
-            dispatch(setAppStatusAC('completed'))
-        } catch (e) {
-            console.warn(e)
+        } catch (e: any) {
+            handleServerNetworkError(dispatch, e)
         }
     }
 
@@ -193,8 +188,3 @@ export type UpdatedTaskDomainType = {
     addedDate?: string
 }
 
-enum RESULT_CODE {
-    SUCCEEDED = 0,
-    FAILED = 1,
-    CAPTURE_FAILED = 10
-}

@@ -16,7 +16,7 @@ export const todolistAPI = {
             'todo-lists', {title})
     },
     deleteTodolist(todolistId: string) {
-        return instance.delete<TodolistsResponseType>(
+        return instance.delete<ResponseType>(
             `todo-lists/${todolistId}`)
     },
     updateTodolist(todolistId: string, title: string) {
@@ -27,13 +27,13 @@ export const todolistAPI = {
         return instance.get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<TasksResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks`, {title})
+        return instance.post<ResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks`, {title})
     },
     deleteTask(todolistId: string, taskId: string) {
-      return instance.delete<TasksResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+      return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, task: TaskDomainType) {
-        return instance.put<TasksResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, task)
+        return instance.put<ResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, task)
     }
 }
 
@@ -44,15 +44,11 @@ export type TodolistDomainType = {
     addedDate: string
     order: number
 }
-type TodolistsResponseType<D = {}> = {
-    resultCode: number
-    messages: string[]
-    data: D
-}
+
 type UpdateTodolistResponseType = ResponseType & {
     fieldsErrors: string[]
 }
-type CreateTodolistResponseType = TodolistsResponseType<{item: TodolistDomainType}>
+type CreateTodolistResponseType = ResponseType<{item: TodolistDomainType}>
 
 // Task types
 export type TaskDomainType = {
@@ -67,7 +63,7 @@ export type TaskDomainType = {
     deadline: string
     addedDate: string
 }
-export type TasksResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
     data: D
     messages: string[]
     fieldsErrors: string[]
@@ -76,7 +72,7 @@ export type TasksResponseType<D = {}> = {
 export type GetTasksResponseType = {
     items: TaskDomainType[]
     totalCount: number
-    error: string
+    error: null | string
 }
 export enum TaskStatuses {
     New = 0,
@@ -90,4 +86,10 @@ export enum TaskPriorities {
     High = 2,
     Urgently = 3,
     Later = 4
+}
+
+export enum RESULT_CODE {
+    SUCCEEDED = 0,
+    FAILED = 1,
+    CAPTURE_FAILED = 10
 }
