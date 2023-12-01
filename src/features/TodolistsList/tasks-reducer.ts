@@ -105,7 +105,7 @@ export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk =>
         }
     }
 export const addTaskTC = (todolistId: string, title: string): AppThunk =>
-    dispatch => {
+    (dispatch) => {
         dispatch(setAppStatusAC('loading'))
         todolistAPI.createTask(todolistId, title)
             .then(res => {
