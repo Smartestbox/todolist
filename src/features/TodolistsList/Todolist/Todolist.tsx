@@ -30,6 +30,7 @@ const Todolist: React.FC<TodolistPropsType> = memo(({todolist, entityStatus}) =>
     const dispatch = useAppDispatch()
 
     useEffect(() => {
+        console.log('Todolist useEffect')
         dispatch(fetchTasksTC(id))
     }, []);
 

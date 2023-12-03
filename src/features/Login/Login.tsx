@@ -3,12 +3,25 @@ import Grid from "@mui/material/Grid";
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel} from "@mui/material";
 import TextField from "@mui/material/TextField/TextField";
 import {useFormik} from "formik";
+import {loginTC} from "./auth-reducer";
+import {useAppDispatch, useAppSelector} from "../../components/App/store";
+import {Navigate} from "react-router-dom";
 
 type FormikErrorsType = {
     email?: string
     password?: string
 }
+
+export type LoginDataType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
+
 export const Login = () => {
+    const dispatch = useAppDispatch()
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    console.log('Login component, isLoggedIn: ', isLoggedIn)
 
     const formik = useFormik({
         initialValues: {
@@ -16,8 +29,10 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async values => {
+            await dispatch(loginTC(values))
+            formik.setSubmitting(false)
+            formik.resetForm()
         },
         validate: values => {
             const errors: FormikErrorsType = {}
@@ -33,11 +48,16 @@ export const Login = () => {
             } else if (values.password.length < 5) {
                 errors.password = 'Password should contain at least 5 symbols'
             }
-            console.log('validated')
+
             return errors
         }
     });
 
+
+
+    if(isLoggedIn) {
+        return <Navigate to={'/'}/>
+    }
 
     return (
         <Grid container justifyContent={'center'}>
@@ -82,7 +102,12 @@ export const Login = () => {
                                 label={'Remember me'}
                                 control={<Checkbox name='rememberMe' onChange={formik.handleChange}
                                                    checked={formik.values.rememberMe}/>}/>
-                            <Button type={'submit'} variant={'contained'} color={'primary'}>
+                            <Button
+                                type={'submit'}
+                                variant={'contained'}
+                                color={'primary'}
+                                disabled={formik.isSubmitting}
+                            >
                                 Login
                             </Button>
                         </FormGroup>

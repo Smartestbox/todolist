@@ -1,4 +1,5 @@
 import axios from "axios";
+import {LoginDataType} from "../features/Login/Login";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -6,6 +7,18 @@ const instance = axios.create({
 })
 
 // api
+export const authAPI = {
+    me() {
+        return instance.get<ResponseType<UserType>>('auth/me')
+    },
+    login(loginData: LoginDataType) {
+        return instance.post<ResponseType<{ userId: number }>>('auth/login', loginData)
+    },
+    logout() {
+        return instance.delete<ResponseType>('auth/login')
+    }
+}
+
 export const todolistAPI = {
     getTodolists() {
         return instance.get<TodolistDomainType[]>('todo-lists')
@@ -27,13 +40,13 @@ export const todolistAPI = {
         return instance.get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<ResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks`, {title})
+        return instance.post<ResponseType<{ item: TaskDomainType }>>(`/todo-lists/${todolistId}/tasks`, {title})
     },
     deleteTask(todolistId: string, taskId: string) {
-      return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+        return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, task: TaskDomainType) {
-        return instance.put<ResponseType<{item: TaskDomainType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, task)
+        return instance.put<ResponseType<{ item: TaskDomainType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, task)
     }
 }
 
@@ -48,7 +61,7 @@ export type TodolistDomainType = {
 type UpdateTodolistResponseType = ResponseType & {
     fieldsErrors: string[]
 }
-type CreateTodolistResponseType = ResponseType<{item: TodolistDomainType}>
+type CreateTodolistResponseType = ResponseType<{ item: TodolistDomainType }>
 
 // Task types
 export type TaskDomainType = {
@@ -74,12 +87,14 @@ export type GetTasksResponseType = {
     totalCount: number
     error: null | string
 }
+
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
+
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,
@@ -92,4 +107,11 @@ export enum RESULT_CODE {
     SUCCEEDED = 0,
     FAILED = 1,
     CAPTURE_FAILED = 10
+}
+
+// User types
+type UserType = {
+    id: number
+    email: string
+    login: string
 }

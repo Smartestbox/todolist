@@ -9,7 +9,7 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({
                                                       title,
                                                       changeItemTitle,
                                                   }) => {
-    console.log('Editable span')
+    // console.log('Editable span')
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
     const onDoubleClickHandler = () => {

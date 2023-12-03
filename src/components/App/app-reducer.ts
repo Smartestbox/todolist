@@ -1,5 +1,5 @@
-
 const initialState = {
+    isInitialized: false,
     status: 'idle' as AppStatusesType,
     error: null as null | string
 }
@@ -15,6 +15,11 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
             return {
                 ...state,
                 error: action.error
+            }
+        case 'APP/SET-IS-INITIALIZED':
+            return {
+                ...state,
+                isInitialized: action.isInitialized
             }
         default:
             return state
@@ -33,10 +38,18 @@ export const setAppErrorAC = (error: string | null) => ({
     error
 })
 
+export const setAppIsInitializedAC = (isInitialized: boolean) => ({
+    type: 'APP/SET-IS-INITIALIZED' as const,
+    isInitialized
+})
+
 
 // Types
 
-export type AppActionsType = ReturnType<typeof setAppStatusAC> | ReturnType<typeof setAppErrorAC>
+export type AppActionsType =
+    | ReturnType<typeof setAppStatusAC>
+    | ReturnType<typeof setAppErrorAC>
+    | ReturnType<typeof setAppIsInitializedAC>
 
 export type InitialStateType = typeof initialState
 

@@ -1,18 +1,38 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styles from './App.module.css'
-import {RootStateType} from "./store";
+import {useAppDispatch, useAppSelector} from "./store";
 import TodolistsList from "../../features/TodolistsList/TodolistsList";
-import {LinearProgress} from "@mui/material";
+import {AppBar, Button, CircularProgress, LinearProgress, Toolbar} from "@mui/material";
 import {ErrorSnackbar} from "../ErrorSnackbar/ErrorSnackbar";
-import {useSelector} from "react-redux";
 import {AppStatusesType} from "./app-reducer";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../../features/Login/Login";
+import {logoutTC, meTC} from "../../features/Login/auth-reducer";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from '@mui/icons-material/Menu';
 
 export type TasksFiltersType = 'All' | 'Completed' | 'Active'
 
 const App = () => {
-    const status = useSelector<RootStateType, AppStatusesType>(state => state.app.status)
+    const status = useAppSelector<AppStatusesType>(state => state.app.status)
+    const isInitialized = useAppSelector<boolean>(state => state.app.isInitialized)
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        console.log('App useEffect')
+        dispatch(meTC())
+    }, []);
+
+    if(!isInitialized) {
+        return <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress />
+        </div>
+    }
+
+    const logout = () => {
+        dispatch(logoutTC())
+    }
 
     return (
         <div className={styles.app}>
@@ -23,6 +43,20 @@ const App = () => {
                     color={'primary'}
                 />
             }
+            <AppBar position="static">
+                <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    {isLoggedIn && <Button color="inherit" onClick={logout}>Logout</Button>}
+                </Toolbar>
+            </AppBar>
             <ErrorSnackbar/>
             <Routes>
                 <Route path={'/'} element={<TodolistsList/>}/>
