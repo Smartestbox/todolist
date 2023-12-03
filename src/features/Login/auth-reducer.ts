@@ -3,6 +3,7 @@ import {setAppIsInitializedAC, setAppStatusAC} from "../../components/App/app-re
 import {authAPI, RESULT_CODE} from "../../api/todolist-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {LoginDataType} from "./Login";
+import {clearDataAC} from "../TodolistsList/todolists-reducer";
 
 
 const initialState = {
@@ -69,6 +70,7 @@ export const logoutTC = (): AppThunk =>
             if(res.data.resultCode === RESULT_CODE.SUCCEEDED) {
                 dispatch(setIsLoggedInAC(false))
                 dispatch(setAppStatusAC('completed'))
+                dispatch(clearDataAC())
             } else {
                 handleServerAppError(dispatch, res.data)
             }

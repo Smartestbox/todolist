@@ -4,6 +4,7 @@ import {AppThunk} from "../../components/App/store";
 import {AppStatusesType, setAppErrorAC, setAppStatusAC} from "../../components/App/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {Dispatch} from "redux";
+import {fetchTasksTC} from "./tasks-reducer";
 
 const initialState: TodolistType[] = []
 
@@ -27,6 +28,8 @@ export const todolistsReducer = (state: TodolistType[] = initialState, action: T
             return state.map(tl => tl.id === action.todolistId
                 ? {...tl, entityStatus: action.entityStatus}
                 : tl)
+        case 'CLEAR-DATA':
+            return []
         default:
             return state
     }
@@ -45,14 +48,16 @@ export const setTodolistsAC = (todolists: TodolistDomainType[]) =>
     ({type: 'TODOLIST/SET-TODOLISTS', todolists}) as const
 export const setEntityStatusAC = (todolistId: string, entityStatus: AppStatusesType) =>
     ({type: 'TODOLIST/SET-ENTITY-STATUS', todolistId, entityStatus}) as const
+export const clearDataAC = () => ({type: 'CLEAR-DATA' as const})
 
 // thunks
 export const fetchTodolistsTC = (): AppThunk =>
     async (dispatch) => {
+        dispatch(setAppStatusAC('loading'))
         try {
-            dispatch(setAppStatusAC('loading'))
             const res = await todolistAPI.getTodolists()
-            dispatch(setTodolistsAC(res))
+            dispatch(setTodolistsAC(res.data))
+            await res.data.forEach(tl => dispatch(fetchTasksTC(tl.id)))
             dispatch(setAppStatusAC('completed'))
         } catch (e) {
             console.warn(e)
@@ -115,6 +120,7 @@ export type TodolistsActionTypes =
     | ReturnType<typeof addTodolistAC>
     | ReturnType<typeof setTodolistsAC>
     | ReturnType<typeof setEntityStatusAC>
+    | ReturnType<typeof clearDataAC>
 
 export type TodolistType = TodolistDomainType & {
     filter: TasksFiltersType

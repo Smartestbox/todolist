@@ -20,7 +20,6 @@ const App = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        console.log('App useEffect')
         dispatch(meTC())
     }, []);
 

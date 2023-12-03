@@ -1,4 +1,4 @@
-import {addTodolistAC, deleteTodolistAC, setTodolistsAC} from "./todolists-reducer";
+import {addTodolistAC, clearDataAC, deleteTodolistAC, setTodolistsAC} from "./todolists-reducer";
 import {RESULT_CODE, TaskDomainType, TaskPriorities, TaskStatuses, todolistAPI} from "../../api/todolist-api";
 import {AppThunk} from "../../components/App/store";
 import {AppStatusesType, setAppStatusAC} from "../../components/App/app-reducer";
@@ -57,7 +57,8 @@ export const tasksReducer = (state: TasksType = initialState, action: TasksActio
             })
             return stateCopy
         }
-
+        case 'CLEAR-DATA':
+            return {}
         default:
             return state
     }
@@ -92,15 +93,15 @@ export const deleteTaskTC = (todolistId: string, taskId: string): AppThunk =>
         try {
             dispatch(setAppStatusAC('loading'))
             dispatch(setTaskEntityStatusAC(todolistId, taskId, 'loading'))
-            const res = await todolistAPI.deleteTask(todolistId, taskId) // ---------CHANGE TO resultCode LOGIC----------
-            if(res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            const res = await todolistAPI.deleteTask(todolistId, taskId)
+            if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
                 dispatch(deleteTaskAC(todolistId, taskId))
                 dispatch(setAppStatusAC('completed'))
             } else {
                 handleServerAppError<{}>(dispatch, res.data)
             }
         } catch (e: any) {
-            dispatch(setTaskEntityStatusAC(todolistId,  taskId, 'idle'))
+            dispatch(setTaskEntityStatusAC(todolistId, taskId, 'idle'))
             handleServerNetworkError(dispatch, e)
         }
     }
@@ -113,7 +114,7 @@ export const addTaskTC = (todolistId: string, title: string): AppThunk =>
                     dispatch(addTaskAC(res.data.data.item))
                     dispatch(setAppStatusAC('completed'))
                 } else {
-                    handleServerAppError<{item: TaskDomainType}>(dispatch, res.data)
+                    handleServerAppError<{ item: TaskDomainType }>(dispatch, res.data)
                 }
             })
             .catch(e => {
@@ -149,7 +150,7 @@ export const updateTaskTC = (
                 dispatch(updateTaskAC(todolistId, taskId, taskForUpdate))
                 dispatch(setTaskEntityStatusAC(todolistId, taskId, 'completed'))
             } else {
-                handleServerAppError<{item: TaskDomainType}>(dispatch, res.data)
+                handleServerAppError<{ item: TaskDomainType }>(dispatch, res.data)
             }
         } catch (e: any) {
             handleServerNetworkError(dispatch, e)
@@ -166,6 +167,7 @@ export type TasksActionTypes =
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof updateTaskAC>
     | ReturnType<typeof setTaskEntityStatusAC>
+    | ReturnType<typeof clearDataAC>
 
 export type TasksType = {
     [key: string]: TaskType[]

@@ -21,7 +21,6 @@ export type LoginDataType = {
 export const Login = () => {
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    console.log('Login component, isLoggedIn: ', isLoggedIn)
 
     const formik = useFormik({
         initialValues: {
@@ -112,7 +111,6 @@ export const Login = () => {
                             </Button>
                         </FormGroup>
                     </form>
-
                 </FormControl>
             </Grid>
         </Grid>

@@ -15,7 +15,6 @@ const TodolistsList: React.FC = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        console.log('TodolistsList useEffect')
         if(!isLoggedIn) return
         dispatch(fetchTodolistsTC())
     }, [])
