@@ -9,9 +9,10 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({
                                                       title,
                                                       changeItemTitle,
                                                   }) => {
-    // console.log('Editable span')
+
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
+
     const onDoubleClickHandler = () => {
         setEditMode(true)
     }
@@ -24,7 +25,6 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({
             setEditMode(false)
         }
     }
-
     const onBlurHandler = () => {
         if(value !== '') {
             changeItemTitle(value)

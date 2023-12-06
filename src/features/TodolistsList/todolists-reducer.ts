@@ -88,12 +88,13 @@ export const createTodolistTC = (title: string): AppThunk =>
             const res = await todolistAPI.createTodolist(title)
             if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
                 dispatch(addTodolistAC(res.data.data.item))
-                dispatch(setAppStatusAC('completed'))
             } else {
                 handleServerAppError<{ item: TodolistDomainType }>(dispatch, res.data)
             }
         } catch (e: any) {
             handleServerNetworkError(dispatch, e)
+        } finally {
+            dispatch(setAppStatusAC('completed'))
         }
     }
 export const changeTodolistTitleTC = (todolistId: string, title: string): AppThunk =>

@@ -32,7 +32,6 @@ const App = () => {
     const logout = () => {
         dispatch(logoutTC())
     }
-
     return (
         <div className={styles.app}>
             {
