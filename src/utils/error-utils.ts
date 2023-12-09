@@ -1,23 +1,19 @@
-import {setAppErrorAC, setAppStatusAC} from "../components/App/app-reducer";
-import {Dispatch} from "redux";
-import {ResponseType} from "../api/todolist-api";
+import { Dispatch } from "redux"
+import { ResponseType } from "../api/todolist-api"
+import { appActions } from "../components/App/app-reducer"
 
-
-export const handleServerAppError = <D>(dispatch: ErrorUtilsDispatch, data: ResponseType<D>) => {
-        if (data.messages.length) {
-            dispatch(setAppErrorAC(data.messages[0]))
-        } else {
-            dispatch(setAppErrorAC('unknown error has occurred'))
-        }
-        dispatch(setAppStatusAC('failed'))
+export const handleServerAppError = <D>(dispatch: Dispatch, data: ResponseType<D>) => {
+    if (data.messages.length) {
+        dispatch(appActions.setAppError({ error: data.messages[0] }))
+    } else {
+        dispatch(appActions.setAppError({ error: "unknown error has occurred" }))
+    }
+    dispatch(appActions.setAppStatus({ status: "failed" }))
 }
 
-export const handleServerNetworkError = (dispatch: ErrorUtilsDispatch, e: { message: string }) => {
-    dispatch(setAppStatusAC('failed'))
-    dispatch(setAppErrorAC(e.message))
+export const handleServerNetworkError = (dispatch: Dispatch, e: { message: string }) => {
+    dispatch(appActions.setAppStatus({ status: "failed" }))
+    dispatch(appActions.setAppError({ error: e.message }))
 }
 
-type ErrorUtilsDispatch = Dispatch<
-    | ReturnType<typeof setAppStatusAC>
-    | ReturnType<typeof setAppErrorAC>
->
+// type ErrorUtilsDispatch = Dispatch<ReturnType<typeof setAppStatusAC> | ReturnType<typeof setAppErrorAC>>

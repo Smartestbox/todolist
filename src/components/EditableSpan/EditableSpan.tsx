@@ -1,15 +1,11 @@
-import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
+import React, { ChangeEvent, KeyboardEvent, memo, useState } from "react"
 
 type EditableSpanType = {
     title: string
     changeItemTitle: (title: string) => void
 }
 
-const EditableSpan: React.FC<EditableSpanType> = memo(({
-                                                      title,
-                                                      changeItemTitle,
-                                                  }) => {
-
+const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle }) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
 
@@ -20,26 +16,30 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({
         setValue(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && value !== '') {
+        if (e.key === "Enter" && value !== "") {
             changeItemTitle(value)
             setEditMode(false)
         }
     }
     const onBlurHandler = () => {
-        if(value !== '') {
+        if (value !== "") {
             changeItemTitle(value)
             setEditMode(false)
         }
     }
 
-    return editMode
-        ? <input type={'text'} value={value}
-                 onChange={onChangeHandler}
-                 onKeyPress={onKeyPressHandler}
-                 onBlur={onBlurHandler}
-                 autoFocus
+    return editMode ? (
+        <input
+            type={"text"}
+            value={value}
+            onChange={onChangeHandler}
+            onKeyPress={onKeyPressHandler}
+            onBlur={onBlurHandler}
+            autoFocus
         />
-        : <span onDoubleClick={onDoubleClickHandler}>{value}</span>
+    ) : (
+        <span onDoubleClick={onDoubleClickHandler}>{value}</span>
+    )
 })
 
-export default EditableSpan;
+export default EditableSpan

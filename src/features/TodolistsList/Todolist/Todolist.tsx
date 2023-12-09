@@ -1,31 +1,26 @@
-import React, {memo, useCallback, useEffect} from 'react';
-import AddItemForm from "../../../components/AddItemForm/AddItemForm";
-import EditableSpan from "../../../components/EditableSpan/EditableSpan";
-import {useSelector} from "react-redux";
-import {RootStateType, useAppDispatch} from "../../../components/App/store";
-import {addTaskTC, fetchTasksTC, TaskType} from "../tasks-reducer";
-import {
-    changeTodolistFilterAC,
-    deleteTodolistTC,
-    TodolistType, changeTodolistTitleTC
-} from "../todolists-reducer";
-import Task from "../Task/Task";
-import {Button} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import styles from './Todolist.module.css'
-import {TaskStatuses} from "../../../api/todolist-api";
-import {AppStatusesType} from "../../../components/App/app-reducer";
-
+import React, { memo, useCallback, useEffect } from "react"
+import AddItemForm from "../../../components/AddItemForm/AddItemForm"
+import EditableSpan from "../../../components/EditableSpan/EditableSpan"
+import { useSelector } from "react-redux"
+import { RootStateType, useAppDispatch } from "../../../components/App/store"
+import { addTaskTC, fetchTasksTC, TaskType } from "../tasks-reducer"
+import { changeTodolistFilterAC, deleteTodolistTC, TodolistType, changeTodolistTitleTC } from "../todolists-reducer"
+import Task from "../Task/Task"
+import { Button } from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete"
+import IconButton from "@mui/material/IconButton"
+import styles from "./Todolist.module.css"
+import { TaskStatuses } from "../../../api/todolist-api"
+import { AppStatusesType } from "../../../components/App/app-reducer"
 
 type TodolistPropsType = {
     todolist: TodolistType
     entityStatus: AppStatusesType
 }
 
-const Todolist: React.FC<TodolistPropsType> = memo(({todolist, entityStatus}) => {
-    const {id, title, filter} = todolist
-    const tasks = useSelector<RootStateType, TaskType[]>(state => state.tasks[id])
+const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) => {
+    const { id, title, filter } = todolist
+    const tasks = useSelector<RootStateType, TaskType[]>((state) => state.tasks[id])
 
     const dispatch = useAppDispatch()
 
@@ -34,66 +29,68 @@ const Todolist: React.FC<TodolistPropsType> = memo(({todolist, entityStatus}) =>
     //     dispatch(fetchTasksTC(id))
     // }, []);
 
-
-    const addItemHandler = useCallback((value: string) => {
-        dispatch(addTaskTC(id, value))
-    }, [dispatch])
+    const addItemHandler = useCallback(
+        (value: string) => {
+            dispatch(addTaskTC(id, value))
+        },
+        [dispatch],
+    )
 
     const onRemoveTodoHandler = () => {
         dispatch(deleteTodolistTC(id))
     }
 
-    const changeTodolistTitleHandler = useCallback((title: string) => {
-        dispatch(changeTodolistTitleTC(id, title))
-    }, [dispatch, id])
+    const changeTodolistTitleHandler = useCallback(
+        (title: string) => {
+            dispatch(changeTodolistTitleTC(id, title))
+        },
+        [dispatch, id],
+    )
 
     const onAllFilterHandler = () => {
-        dispatch(changeTodolistFilterAC(id, 'All'))
+        dispatch(changeTodolistFilterAC(id, "All"))
     }
 
     const onActiveFilterHandler = () => {
-        dispatch(changeTodolistFilterAC(id, 'Active'))
+        dispatch(changeTodolistFilterAC(id, "Active"))
     }
 
     const onCompletedFilterHandler = () => {
-        dispatch(changeTodolistFilterAC(id, 'Completed'))
+        dispatch(changeTodolistFilterAC(id, "Completed"))
     }
 
-    const tasksForTodo: TaskType[] = filter === 'All'
-        ? tasks
-        : filter === 'Completed'
-            ? tasks.filter(t => t.status === TaskStatuses.Completed)
-            : tasks.filter(t => t.status === TaskStatuses.New)
+    const tasksForTodo: TaskType[] =
+        filter === "All"
+            ? tasks
+            : filter === "Completed"
+              ? tasks.filter((t) => t.status === TaskStatuses.Completed)
+              : tasks.filter((t) => t.status === TaskStatuses.New)
 
-    const isDisabled = entityStatus === 'loading'
+    const isDisabled = entityStatus === "loading"
 
     return (
         <div className={styles.todolist}>
-            <EditableSpan title={title} changeItemTitle={changeTodolistTitleHandler}/>
+            <EditableSpan title={title} changeItemTitle={changeTodolistTitleHandler} />
             <IconButton onClick={onRemoveTodoHandler} disabled={isDisabled}>
-                <DeleteIcon/>
+                <DeleteIcon />
             </IconButton>
-            <AddItemForm label='Add task' disabled={isDisabled} addItem={addItemHandler}/>
-            {
-                tasksForTodo.map(t => {
-                    return (
-                        <Task
-                            key={t.id}
-                            todolistId={id}
-                            task={t}
-                            entityStatus={t.entityStatus}
-                        />
-                    )
-                })
-            }
+            <AddItemForm label="Add task" disabled={isDisabled} addItem={addItemHandler} />
+            {tasksForTodo.map((t) => {
+                return <Task key={t.id} todolistId={id} task={t} entityStatus={t.entityStatus} />
+            })}
             <div>
-                <Button variant='text' size='small' onClick={onAllFilterHandler}>All</Button>
-                <Button variant='text' size='small' color='warning' onClick={onActiveFilterHandler}>Active</Button>
-                <Button variant='text' size='small' color='success'
-                        onClick={onCompletedFilterHandler}>Completed</Button>
+                <Button variant="text" size="small" onClick={onAllFilterHandler}>
+                    All
+                </Button>
+                <Button variant="text" size="small" color="warning" onClick={onActiveFilterHandler}>
+                    Active
+                </Button>
+                <Button variant="text" size="small" color="success" onClick={onCompletedFilterHandler}>
+                    Completed
+                </Button>
             </div>
         </div>
-    );
+    )
 })
 
-export default Todolist;
+export default Todolist
