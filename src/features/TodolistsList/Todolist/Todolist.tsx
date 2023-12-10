@@ -4,7 +4,7 @@ import EditableSpan from "../../../components/EditableSpan/EditableSpan"
 import { useSelector } from "react-redux"
 import { RootStateType, useAppDispatch } from "../../../components/App/store"
 import { addTaskTC, fetchTasksTC, TaskType } from "../tasks-reducer"
-import { changeTodolistFilterAC, deleteTodolistTC, TodolistType, changeTodolistTitleTC } from "../todolists-reducer"
+import { deleteTodolistTC, TodolistType, changeTodolistTitleTC, todolistsActions } from "../todolists-reducer"
 import Task from "../Task/Task"
 import { Button } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -23,11 +23,6 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
     const tasks = useSelector<RootStateType, TaskType[]>((state) => state.tasks[id])
 
     const dispatch = useAppDispatch()
-
-    // useEffect(() => {
-    //     console.log('Todolist useEffect')
-    //     dispatch(fetchTasksTC(id))
-    // }, []);
 
     const addItemHandler = useCallback(
         (value: string) => {
@@ -48,15 +43,15 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
     )
 
     const onAllFilterHandler = () => {
-        dispatch(changeTodolistFilterAC(id, "All"))
+        dispatch(todolistsActions.changeTodolistFilter({ id, filter: "All" }))
     }
 
     const onActiveFilterHandler = () => {
-        dispatch(changeTodolistFilterAC(id, "Active"))
+        dispatch(todolistsActions.changeTodolistFilter({ id, filter: "Active" }))
     }
 
     const onCompletedFilterHandler = () => {
-        dispatch(changeTodolistFilterAC(id, "Completed"))
+        dispatch(todolistsActions.changeTodolistFilter({ id, filter: "Completed" }))
     }
 
     const tasksForTodo: TaskType[] =
@@ -79,13 +74,23 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
                 return <Task key={t.id} todolistId={id} task={t} entityStatus={t.entityStatus} />
             })}
             <div>
-                <Button variant="text" size="small" onClick={onAllFilterHandler}>
+                <Button variant={filter === "All" ? "contained" : "text"} size="small" onClick={onAllFilterHandler}>
                     All
                 </Button>
-                <Button variant="text" size="small" color="warning" onClick={onActiveFilterHandler}>
+                <Button
+                    variant={filter === "Active" ? "contained" : "text"}
+                    size="small"
+                    color="warning"
+                    onClick={onActiveFilterHandler}
+                >
                     Active
                 </Button>
-                <Button variant="text" size="small" color="success" onClick={onCompletedFilterHandler}>
+                <Button
+                    variant={filter === "Completed" ? "contained" : "text"}
+                    size="small"
+                    color="success"
+                    onClick={onCompletedFilterHandler}
+                >
                     Completed
                 </Button>
             </div>

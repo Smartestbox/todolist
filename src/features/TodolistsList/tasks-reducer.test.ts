@@ -1,6 +1,6 @@
-import { addTaskAC, deleteTaskAC, setTaskEntityStatusAC, tasksReducer, TasksType, updateTaskAC } from "./tasks-reducer"
-import { addTodolistAC, deleteTodolistAC, setTodolistsAC } from "./todolists-reducer"
+import { tasksActions, tasksReducer, TasksType } from "./tasks-reducer"
 import { TaskPriorities, TaskStatuses } from "../../api/todolist-api"
+import { todolistsActions } from "./todolists-reducer"
 
 let todolistId1: string
 let todolistId2: string
@@ -97,18 +97,22 @@ beforeEach(() => {
 })
 
 test("correct task status should be changed", () => {
-    const action = updateTaskAC(todolistId1, "1", {
-        id: "1",
-        title: "HTML",
-        status: TaskStatuses.New,
-        todoListId: todolistId1,
-        startDate: "",
-        description: "",
-        deadline: "",
-        addedDate: "",
-        order: 0,
-        priority: TaskPriorities.Low,
-        entityStatus: "idle",
+    const action = tasksActions.updateTask({
+        todolistId: todolistId1,
+        taskId: "1",
+        taskForUpdate: {
+            id: "1",
+            title: "HTML",
+            status: TaskStatuses.New,
+            todoListId: todolistId1,
+            startDate: "",
+            description: "",
+            deadline: "",
+            addedDate: "",
+            order: 0,
+            priority: TaskPriorities.Low,
+            entityStatus: "idle",
+        },
     })
 
     const endState: TasksType = tasksReducer(startState, action)
@@ -117,17 +121,19 @@ test("correct task status should be changed", () => {
 })
 
 test("correct task should be added to correct todolist", () => {
-    const action = addTaskAC({
-        addedDate: "",
-        deadline: "",
-        description: "",
-        id: "aks-232",
-        order: 0,
-        priority: TaskPriorities.Low,
-        startDate: "",
-        status: TaskStatuses.New,
-        title: "Jest",
-        todoListId: "2",
+    const action = tasksActions.addTask({
+        task: {
+            addedDate: "",
+            deadline: "",
+            description: "",
+            id: "aks-232",
+            order: 0,
+            priority: TaskPriorities.Low,
+            startDate: "",
+            status: TaskStatuses.New,
+            title: "Jest",
+            todoListId: "2",
+        },
     })
 
     const endState: TasksType = tasksReducer(startState, action)
@@ -139,7 +145,7 @@ test("correct task should be added to correct todolist", () => {
 })
 
 test("correct task should be removed from correct todolist", () => {
-    const action = deleteTaskAC(todolistId1, "2")
+    const action = tasksActions.deleteTask({ todolistId: todolistId1, taskId: "2" })
 
     const endState: TasksType = tasksReducer(startState, action)
 
@@ -149,18 +155,22 @@ test("correct task should be removed from correct todolist", () => {
 })
 
 test("correct title should be changed in correct task", () => {
-    const action = updateTaskAC(todolistId2, "3", {
-        id: "3",
-        title: "Nest.js",
-        status: TaskStatuses.New,
-        todoListId: todolistId2,
-        startDate: "",
-        description: "",
-        deadline: "",
-        addedDate: "",
-        order: 0,
-        priority: TaskPriorities.Low,
-        entityStatus: "idle",
+    const action = tasksActions.updateTask({
+        todolistId: todolistId2,
+        taskId: "3",
+        taskForUpdate: {
+            id: "3",
+            title: "Nest.js",
+            status: TaskStatuses.New,
+            todoListId: todolistId2,
+            startDate: "",
+            description: "",
+            deadline: "",
+            addedDate: "",
+            order: 0,
+            priority: TaskPriorities.Low,
+            entityStatus: "idle",
+        },
     })
 
     const endState: TasksType = tasksReducer(startState, action)
@@ -170,7 +180,7 @@ test("correct title should be changed in correct task", () => {
 })
 
 test("correct array of tasks should be removed", () => {
-    const action = deleteTodolistAC(todolistId1)
+    const action = todolistsActions.deleteTodolist({ todolistId: todolistId1 })
 
     const endState: TasksType = tasksReducer(startState, action)
 
@@ -180,23 +190,27 @@ test("correct array of tasks should be removed", () => {
 })
 
 test("new empty array of tasks should be added", () => {
-    const action = addTodolistAC({
-        id: "3",
-        title: "New todolist",
-        addedDate: "",
-        order: 0,
+    const action = todolistsActions.addTodolist({
+        todolist: {
+            id: "3",
+            title: "New todolist",
+            addedDate: "",
+            order: 0,
+        },
     })
 
     const endState: TasksType = tasksReducer(startState, action)
 
-    expect(endState).toHaveProperty(action.todolist.id, [])
+    expect(endState).toHaveProperty(action.payload.todolist.id, [])
 })
 
 test("when todolists was set, tasks with empty arrays should be added", () => {
-    const action = setTodolistsAC([
-        { id: "1", title: "title 1", order: 0, addedDate: "" },
-        { id: "2", title: "title 2", order: 0, addedDate: "" },
-    ])
+    const action = todolistsActions.setTodolists({
+        todolists: [
+            { id: "1", title: "title 1", order: 0, addedDate: "" },
+            { id: "2", title: "title 2", order: 0, addedDate: "" },
+        ],
+    })
 
     const endState: TasksType = tasksReducer({}, action)
 
@@ -205,7 +219,7 @@ test("when todolists was set, tasks with empty arrays should be added", () => {
 })
 
 test("correct entity status should be changed in correct task", () => {
-    const action = setTaskEntityStatusAC("1", "3", "failed")
+    const action = tasksActions.setTaskEntityStatus({ todolistId: "1", taskId: "3", entityStatus: "failed" })
 
     const endState: TasksType = tasksReducer(startState, action)
 
