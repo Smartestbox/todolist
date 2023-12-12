@@ -10,13 +10,16 @@ import { Login } from "../../features/Login/Login"
 import { logoutTC, meTC } from "../../features/Login/auth-reducer"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
+import { selectAppIsInitialized, selectAppStatus } from "./app-selectors"
+import { selectIsLoggedIn } from "../../features/Login/auth-selectors"
 
 export type TasksFiltersType = "All" | "Completed" | "Active"
 
 const App = () => {
-    const status = useAppSelector<AppStatusesType>((state) => state.app.status)
-    const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized)
-    const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+    const status = useAppSelector<AppStatusesType>(selectAppStatus)
+    const isInitialized = useAppSelector<boolean>(selectAppIsInitialized)
+    const isLoggedIn = useAppSelector(selectIsLoggedIn)
+
     const dispatch = useAppDispatch()
 
     useEffect(() => {

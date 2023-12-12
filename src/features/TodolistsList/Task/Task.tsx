@@ -21,8 +21,10 @@ const Task: React.FC<TaskPropsType> = memo(({ todolistId, task, entityStatus }) 
         dispatch(deleteTaskTC(todolistId, task.id))
     }
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
-        dispatch(updateTaskTC(todolistId, task.id, { status: taskStatus }))
+        if (e.currentTarget.value.length < 101) {
+            const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
+            dispatch(updateTaskTC(todolistId, task.id, { status: taskStatus }))
+        }
     }
     const changeTaskTitleHandler = (taskTitle: string) => {
         dispatch(updateTaskTC(todolistId, task.id, { title: taskTitle }))

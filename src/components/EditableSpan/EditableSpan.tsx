@@ -16,13 +16,13 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle 
         setValue(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && value !== "") {
+        if (e.key === "Enter" && value !== "" && value.length < 101) {
             changeItemTitle(value)
             setEditMode(false)
         }
     }
     const onBlurHandler = () => {
-        if (value !== "") {
+        if (value !== "" && value.length < 101) {
             changeItemTitle(value)
             setEditMode(false)
         }

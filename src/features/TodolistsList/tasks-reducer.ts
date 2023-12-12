@@ -4,7 +4,7 @@ import { appActions, AppStatusesType } from "../../components/App/app-reducer"
 import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { todolistsActions } from "./todolists-reducer"
-import { clearTasksAndTodolists } from "../../common/actions/common.actions"
+import { clearTasksAndTodolists } from "../../common/actions/common-actions"
 
 const slice = createSlice({
     name: "tasks",
@@ -113,7 +113,7 @@ export const addTaskTC =
         }
     }
 export const updateTaskTC =
-    (todolistId: string, taskId: string, taskModelWithOnlyUpdatedProperties: UpdatedTaskDomainType): AppThunk =>
+    (todolistId: string, taskId: string, taskModelWithOnlyUpdatedProperties: TaskWithOnlyUpdatedFieldsType): AppThunk =>
     async (dispatch, getState) => {
         try {
             dispatch(appActions.setAppStatus({ status: "loading" }))
@@ -139,9 +139,11 @@ export const updateTaskTC =
                 dispatch(tasksActions.setTaskEntityStatus({ todolistId, taskId, entityStatus: "completed" }))
             } else {
                 handleServerAppError<{ item: TaskDomainType }>(dispatch, res.data)
+                dispatch(tasksActions.setTaskEntityStatus({ todolistId, taskId, entityStatus: "failed" }))
             }
         } catch (e: any) {
             handleServerNetworkError(dispatch, e)
+            dispatch(tasksActions.setTaskEntityStatus({ todolistId, taskId, entityStatus: "failed" }))
         }
     }
 
@@ -155,7 +157,7 @@ export type TaskType = TaskDomainType & {
     entityStatus: AppStatusesType
 }
 
-export type UpdatedTaskDomainType = {
+export type TaskWithOnlyUpdatedFieldsType = {
     id?: string
     title?: string
     description?: string

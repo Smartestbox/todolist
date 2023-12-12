@@ -4,9 +4,7 @@ import { handleServerAppError, handleServerNetworkError } from "../../utils/erro
 import { LoginDataType } from "./Login"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { appActions } from "../../components/App/app-reducer"
-import { todolistsActions } from "../TodolistsList/todolists-reducer"
-import { tasksActions } from "../TodolistsList/tasks-reducer"
-import { clearTasksAndTodolists } from "../../common/actions/common.actions"
+import { clearTasksAndTodolists } from "../../common/actions/common-actions"
 
 const slice = createSlice({
     name: "auth",

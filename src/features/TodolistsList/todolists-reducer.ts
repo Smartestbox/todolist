@@ -5,7 +5,7 @@ import { appActions, AppStatusesType } from "../../components/App/app-reducer"
 import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils"
 import { fetchTasksTC } from "./tasks-reducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { clearTasksAndTodolists } from "../../common/actions/common.actions"
+import { clearTasksAndTodolists } from "../../common/actions/common-actions"
 
 const slice = createSlice({
     name: "todolists",

@@ -1,9 +1,8 @@
-import React, { memo, useCallback, useEffect } from "react"
+import React, { memo, useCallback } from "react"
 import AddItemForm from "../../../components/AddItemForm/AddItemForm"
 import EditableSpan from "../../../components/EditableSpan/EditableSpan"
-import { useSelector } from "react-redux"
-import { RootStateType, useAppDispatch } from "../../../components/App/store"
-import { addTaskTC, fetchTasksTC, TaskType } from "../tasks-reducer"
+import { useAppDispatch, useAppSelector } from "../../../components/App/store"
+import { addTaskTC, TaskType } from "../tasks-reducer"
 import { deleteTodolistTC, TodolistType, changeTodolistTitleTC, todolistsActions } from "../todolists-reducer"
 import Task from "../Task/Task"
 import { Button } from "@mui/material"
@@ -12,6 +11,7 @@ import IconButton from "@mui/material/IconButton"
 import styles from "./Todolist.module.css"
 import { TaskStatuses } from "../../../api/todolist-api"
 import { AppStatusesType } from "../../../components/App/app-reducer"
+import { selectTasks } from "../tasks-selectors"
 
 type TodolistPropsType = {
     todolist: TodolistType
@@ -20,7 +20,7 @@ type TodolistPropsType = {
 
 const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) => {
     const { id, title, filter } = todolist
-    const tasks = useSelector<RootStateType, TaskType[]>((state) => state.tasks[id])
+    const tasks = useAppSelector(selectTasks(id))
 
     const dispatch = useAppDispatch()
 

@@ -8,10 +8,13 @@ import Todolist from "./Todolist/Todolist"
 import styles from "../../components/App/App.module.css"
 import AddItemForm from "../../components/AddItemForm/AddItemForm"
 import { Navigate } from "react-router-dom"
+import { selectIsLoggedIn } from "../Login/auth-selectors"
+import { selectTodolists } from "./todolists-selectors"
 
 const TodolistsList: React.FC = () => {
-    const todolists = useAppSelector<TodolistType[]>((state) => state.todolists)
-    const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+    const todolists = useAppSelector<TodolistType[]>(selectTodolists)
+    const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn)
+
     const dispatch = useAppDispatch()
 
     useEffect(() => {
