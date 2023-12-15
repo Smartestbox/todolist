@@ -1,13 +1,13 @@
-import { AppThunk } from "../../components/App/store"
-import { authAPI, RESULT_CODE } from "../../api/todolist-api"
-import { handleServerAppError, handleServerNetworkError } from "../../utils/error-utils"
-import { LoginDataType } from "./Login"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { appActions } from "../../components/App/app-reducer"
-import { clearTasksAndTodolists } from "../../common/actions/common-actions"
+import { AppThunk } from '../../components/App/store'
+import { authAPI, RESULT_CODE } from '../../api/todolist-api'
+import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
+import { LoginDataType } from './Login'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { appActions } from '../../components/App/app-reducer'
+import { clearTasksAndTodolists } from '../../common/actions/common-actions'
 
 const slice = createSlice({
-    name: "auth",
+    name: 'auth',
     initialState: {
         isLoggedIn: false,
     },
@@ -24,12 +24,12 @@ export type AuthInitialState = ReturnType<typeof slice.getInitialState>
 
 // Thunks
 export const meTC = (): AppThunk => async (dispatch) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }))
+    dispatch(appActions.setAppStatus({ status: 'loading' }))
     try {
         const res = await authAPI.me()
         if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
             dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
-            dispatch(appActions.setAppStatus({ status: "completed" }))
+            dispatch(appActions.setAppStatus({ status: 'completed' }))
         } else {
             handleServerAppError(dispatch, res.data)
         }
@@ -42,12 +42,12 @@ export const meTC = (): AppThunk => async (dispatch) => {
 export const loginTC =
     (loginData: LoginDataType): AppThunk =>
     async (dispatch) => {
-        dispatch(appActions.setAppStatus({ status: "loading" }))
+        dispatch(appActions.setAppStatus({ status: 'loading' }))
         try {
             const res = await authAPI.login(loginData)
             if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
                 dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }))
-                dispatch(appActions.setAppStatus({ status: "completed" }))
+                dispatch(appActions.setAppStatus({ status: 'completed' }))
             } else {
                 handleServerAppError(dispatch, res.data)
             }
@@ -57,12 +57,12 @@ export const loginTC =
     }
 
 export const logoutTC = (): AppThunk => async (dispatch) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }))
+    dispatch(appActions.setAppStatus({ status: 'loading' }))
     try {
         const res = await authAPI.logout()
         if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
             dispatch(authActions.setIsLoggedIn({ isLoggedIn: false }))
-            dispatch(appActions.setAppStatus({ status: "completed" }))
+            dispatch(appActions.setAppStatus({ status: 'completed' }))
             dispatch(clearTasksAndTodolists())
         } else {
             handleServerAppError(dispatch, res.data)

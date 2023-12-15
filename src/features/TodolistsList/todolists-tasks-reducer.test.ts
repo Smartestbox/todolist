@@ -1,15 +1,15 @@
-import { todolistsActions, todolistsReducer, TodolistType } from "./todolists-reducer"
-import { tasksReducer, TasksType } from "./tasks-reducer"
+import { todolistsActions, todolistsReducer, TodolistType } from './todolists-reducer'
+import { tasksReducer, TasksType } from './tasks-reducer'
 
-test("ids should be equals", () => {
+test('ids should be equals', () => {
     const startTasksState: TasksType = {}
     const startTodolistsState: TodolistType[] = []
 
     const action = todolistsActions.addTodolist({
         todolist: {
-            id: "3",
-            title: "New todolist",
-            addedDate: "",
+            id: '3',
+            title: 'New todolist',
+            addedDate: '',
             order: 0,
         },
     })

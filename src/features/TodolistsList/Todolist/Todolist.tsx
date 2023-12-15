@@ -1,17 +1,17 @@
-import React, { memo, useCallback } from "react"
-import AddItemForm from "../../../components/AddItemForm/AddItemForm"
-import EditableSpan from "../../../components/EditableSpan/EditableSpan"
-import { useAppDispatch, useAppSelector } from "../../../components/App/store"
-import { addTaskTC, TaskType } from "../tasks-reducer"
-import { deleteTodolistTC, TodolistType, changeTodolistTitleTC, todolistsActions } from "../todolists-reducer"
-import Task from "../Task/Task"
-import { Button } from "@mui/material"
-import DeleteIcon from "@mui/icons-material/Delete"
-import IconButton from "@mui/material/IconButton"
-import styles from "./Todolist.module.css"
-import { TaskStatuses } from "../../../api/todolist-api"
-import { AppStatusesType } from "../../../components/App/app-reducer"
-import { selectTasks } from "../tasks-selectors"
+import React, { memo, useCallback } from 'react'
+import AddItemForm from '../../../components/AddItemForm/AddItemForm'
+import EditableSpan from '../../../components/EditableSpan/EditableSpan'
+import { useAppDispatch, useAppSelector } from '../../../components/App/store'
+import { tasksThunks, TaskType } from '../tasks-reducer'
+import { deleteTodolistTC, TodolistType, changeTodolistTitleTC, todolistsActions } from '../todolists-reducer'
+import Task from '../Task/Task'
+import { Button } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import IconButton from '@mui/material/IconButton'
+import styles from './Todolist.module.css'
+import { TaskStatuses } from '../../../api/todolist-api'
+import { AppStatusesType } from '../../../components/App/app-reducer'
+import { selectTasks } from '../tasks-selectors'
 
 type TodolistPropsType = {
     todolist: TodolistType
@@ -25,8 +25,8 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
     const dispatch = useAppDispatch()
 
     const addItemHandler = useCallback(
-        (value: string) => {
-            dispatch(addTaskTC(id, value))
+        (title: string) => {
+            dispatch(tasksThunks.addTask({ todolistId: id, title }))
         },
         [dispatch],
     )
@@ -43,25 +43,25 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
     )
 
     const onAllFilterHandler = () => {
-        dispatch(todolistsActions.changeTodolistFilter({ id, filter: "All" }))
+        dispatch(todolistsActions.changeTodolistFilter({ id, filter: 'All' }))
     }
 
     const onActiveFilterHandler = () => {
-        dispatch(todolistsActions.changeTodolistFilter({ id, filter: "Active" }))
+        dispatch(todolistsActions.changeTodolistFilter({ id, filter: 'Active' }))
     }
 
     const onCompletedFilterHandler = () => {
-        dispatch(todolistsActions.changeTodolistFilter({ id, filter: "Completed" }))
+        dispatch(todolistsActions.changeTodolistFilter({ id, filter: 'Completed' }))
     }
 
     const tasksForTodo: TaskType[] =
-        filter === "All"
+        filter === 'All'
             ? tasks
-            : filter === "Completed"
+            : filter === 'Completed'
               ? tasks.filter((t) => t.status === TaskStatuses.Completed)
               : tasks.filter((t) => t.status === TaskStatuses.New)
 
-    const isDisabled = entityStatus === "loading"
+    const isDisabled = entityStatus === 'loading'
 
     return (
         <div className={styles.todolist}>
@@ -74,11 +74,11 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
                 return <Task key={t.id} todolistId={id} task={t} entityStatus={t.entityStatus} />
             })}
             <div>
-                <Button variant={filter === "All" ? "contained" : "text"} size="small" onClick={onAllFilterHandler}>
+                <Button variant={filter === 'All' ? 'contained' : 'text'} size="small" onClick={onAllFilterHandler}>
                     All
                 </Button>
                 <Button
-                    variant={filter === "Active" ? "contained" : "text"}
+                    variant={filter === 'Active' ? 'contained' : 'text'}
                     size="small"
                     color="warning"
                     onClick={onActiveFilterHandler}
@@ -86,7 +86,7 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
                     Active
                 </Button>
                 <Button
-                    variant={filter === "Completed" ? "contained" : "text"}
+                    variant={filter === 'Completed' ? 'contained' : 'text'}
                     size="small"
                     color="success"
                     onClick={onCompletedFilterHandler}

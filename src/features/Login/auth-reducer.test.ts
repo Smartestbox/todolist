@@ -1,4 +1,4 @@
-import { authActions, AuthInitialState, authReducer } from "./auth-reducer"
+import { authActions, AuthInitialState, authReducer } from './auth-reducer'
 
 let initialState: AuthInitialState
 
@@ -8,7 +8,7 @@ beforeEach(() => {
     }
 })
 
-test("user should be logged in", () => {
+test('user should be logged in', () => {
     const action = authActions.setIsLoggedIn({ isLoggedIn: true })
 
     const endState = authReducer(initialState, action)

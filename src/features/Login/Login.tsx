@@ -1,11 +1,11 @@
-import React from "react"
-import Grid from "@mui/material/Grid"
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel } from "@mui/material"
-import TextField from "@mui/material/TextField/TextField"
-import { useFormik } from "formik"
-import { loginTC } from "./auth-reducer"
-import { useAppDispatch, useAppSelector } from "../../components/App/store"
-import { Navigate } from "react-router-dom"
+import React from 'react'
+import Grid from '@mui/material/Grid'
+import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel } from '@mui/material'
+import TextField from '@mui/material/TextField/TextField'
+import { useFormik } from 'formik'
+import { loginTC } from './auth-reducer'
+import { useAppDispatch, useAppSelector } from '../../components/App/store'
+import { Navigate } from 'react-router-dom'
 
 type FormikErrorsType = {
     email?: string
@@ -24,8 +24,8 @@ export const Login = () => {
 
     const formik = useFormik({
         initialValues: {
-            email: "",
-            password: "",
+            email: '',
+            password: '',
             rememberMe: false,
         },
         onSubmit: async (values) => {
@@ -37,15 +37,15 @@ export const Login = () => {
             const errors: FormikErrorsType = {}
 
             if (!values.email) {
-                errors.email = "Required"
+                errors.email = 'Required'
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                errors.email = "Invalid email address"
+                errors.email = 'Invalid email address'
             }
 
             if (!values.password) {
-                errors.password = "Required"
+                errors.password = 'Required'
             } else if (values.password.length < 5) {
-                errors.password = "Password should contain at least 5 symbols"
+                errors.password = 'Password should contain at least 5 symbols'
             }
 
             return errors
@@ -53,18 +53,18 @@ export const Login = () => {
     })
 
     if (isLoggedIn) {
-        return <Navigate to={"/"} />
+        return <Navigate to={'/'} />
     }
 
     return (
-        <Grid container justifyContent={"center"}>
-            <Grid item justifyContent={"center"}>
+        <Grid container justifyContent={'center'}>
+            <Grid item justifyContent={'center'}>
                 <FormControl>
                     <FormLabel>
                         <p>
                             To log in get registered
-                            <a href={"https://social-network.samuraijs.com/"} target={"_blank"}>
-                                {" "}
+                            <a href={'https://social-network.samuraijs.com/'} target={'_blank'}>
+                                {' '}
                                 here
                             </a>
                         </p>
@@ -98,7 +98,7 @@ export const Login = () => {
                                 helperText={formik.touched.password && formik.errors.password}
                             />
                             <FormControlLabel
-                                label={"Remember me"}
+                                label={'Remember me'}
                                 control={
                                     <Checkbox
                                         name="rememberMe"
@@ -108,9 +108,9 @@ export const Login = () => {
                                 }
                             />
                             <Button
-                                type={"submit"}
-                                variant={"contained"}
-                                color={"primary"}
+                                type={'submit'}
+                                variant={'contained'}
+                                color={'primary'}
                                 disabled={formik.isSubmitting}
                             >
                                 Login

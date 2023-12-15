@@ -1,13 +1,13 @@
-import React, { ChangeEvent, memo } from "react"
-import styles from "../../../components/App/App.module.css"
-import EditableSpan from "../../../components/EditableSpan/EditableSpan"
-import { deleteTaskTC, updateTaskTC } from "../tasks-reducer"
-import { Checkbox } from "@mui/material"
-import IconButton from "@mui/material/IconButton"
-import DeleteIcon from "@mui/icons-material/Delete"
-import { TaskDomainType, TaskStatuses } from "../../../api/todolist-api"
-import { useAppDispatch } from "../../../components/App/store"
-import { AppStatusesType } from "../../../components/App/app-reducer"
+import React, { ChangeEvent, memo } from 'react'
+import styles from '../../../components/App/App.module.css'
+import EditableSpan from '../../../components/EditableSpan/EditableSpan'
+import { deleteTaskTC, tasksThunks } from '../tasks-reducer'
+import { Checkbox } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { TaskDomainType, TaskStatuses } from '../../../api/todolist-api'
+import { useAppDispatch } from '../../../components/App/store'
+import { AppStatusesType } from '../../../components/App/app-reducer'
 
 type TaskPropsType = {
     todolistId: string
@@ -23,14 +23,26 @@ const Task: React.FC<TaskPropsType> = memo(({ todolistId, task, entityStatus }) 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.value.length < 101) {
             const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
-            dispatch(updateTaskTC(todolistId, task.id, { status: taskStatus }))
+            dispatch(
+                tasksThunks.updateTask({
+                    todolistId,
+                    taskId: task.id,
+                    taskModelWithOnlyUpdatedProperties: { status: taskStatus },
+                }),
+            )
         }
     }
     const changeTaskTitleHandler = (taskTitle: string) => {
-        dispatch(updateTaskTC(todolistId, task.id, { title: taskTitle }))
+        dispatch(
+            tasksThunks.updateTask({
+                todolistId,
+                taskId: task.id,
+                taskModelWithOnlyUpdatedProperties: { title: taskTitle },
+            }),
+        )
     }
 
-    const isDisabled = entityStatus === "loading"
+    const isDisabled = entityStatus === 'loading'
 
     return (
         <li className={styles.task}>

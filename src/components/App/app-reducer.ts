@@ -1,10 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 const slice = createSlice({
-    name: "app",
+    name: 'app',
     initialState: {
         isInitialized: false,
-        status: "idle" as AppStatusesType,
+        status: 'idle' as AppStatusesType,
         error: null as null | string,
     },
     reducers: {
@@ -25,4 +25,4 @@ export const appActions = slice.actions
 
 // Types
 export type AppInitialState = ReturnType<typeof slice.getInitialState>
-export type AppStatusesType = "idle" | "loading" | "completed" | "failed"
+export type AppStatusesType = 'idle' | 'loading' | 'completed' | 'failed'

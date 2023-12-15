@@ -1,17 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/react"
-import AddItemForm from "./AddItemForm"
+import type { Meta, StoryObj } from '@storybook/react'
+import AddItemForm from './AddItemForm'
 
 const meta: Meta<typeof AddItemForm> = {
-    title: "TODOLISTS/AddItemForm",
+    title: 'TODOLISTS/AddItemForm',
     component: AddItemForm,
     parameters: {
-        layout: "centered",
+        layout: 'centered',
     },
-    tags: ["autodocs"],
+    tags: ['autodocs'],
     argTypes: {
         addItem: {
-            action: "clicked",
-            description: "Button clicked inside form",
+            action: 'clicked',
+            description: 'Button clicked inside form',
         },
     },
 }
@@ -20,7 +20,7 @@ type Story = StoryObj<typeof AddItemForm>
 
 export const AddItemFormStory: Story = {
     args: {
-        label: "Add item",
+        label: 'Add item',
         fullWidth: true,
     },
 }

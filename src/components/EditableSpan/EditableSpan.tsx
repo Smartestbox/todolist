@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, memo, useState } from "react"
+import React, { ChangeEvent, KeyboardEvent, memo, useState } from 'react'
 
 type EditableSpanType = {
     title: string
@@ -16,13 +16,13 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle 
         setValue(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && value !== "" && value.length < 101) {
+        if (e.key === 'Enter' && value !== '' && value.length < 101) {
             changeItemTitle(value)
             setEditMode(false)
         }
     }
     const onBlurHandler = () => {
-        if (value !== "" && value.length < 101) {
+        if (value !== '' && value.length < 101) {
             changeItemTitle(value)
             setEditMode(false)
         }
@@ -30,7 +30,7 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle 
 
     return editMode ? (
         <input
-            type={"text"}
+            type={'text'}
             value={value}
             onChange={onChangeHandler}
             onKeyPress={onKeyPressHandler}
