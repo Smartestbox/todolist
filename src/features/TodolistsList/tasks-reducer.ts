@@ -1,11 +1,12 @@
 import { RESULT_CODE, TaskDomainType, TaskPriorities, TaskStatuses, todolistAPI } from '../../api/todolist-api'
 import { AppThunk } from '../../components/App/store'
 import { appActions, AppStatusesType } from '../../components/App/app-reducer'
-import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
+import { handleServerNetworkError } from '../../utils/handleServerNetworkError'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { todolistsActions } from './todolists-reducer'
 import { clearTasksAndTodolists } from '../../common/actions/common-actions'
 import { createAppAsyncThunk } from '../../utils/createAppAsyncThunk'
+import { handleServerAppError } from '../../utils/handleServerAppError'
 
 // Thunks
 const fetchTasks = createAppAsyncThunk<{ todolistId: string; tasks: TaskDomainType[] }, string>(

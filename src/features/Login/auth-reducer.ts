@@ -1,6 +1,6 @@
 import { AppThunk } from '../../components/App/store'
 import { authAPI, RESULT_CODE } from '../../api/todolist-api'
-import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
+import { handleServerAppError, handleServerNetworkError } from '../../utils/handleServerNetworkError'
 import { LoginDataType } from './Login'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { appActions } from '../../components/App/app-reducer'
