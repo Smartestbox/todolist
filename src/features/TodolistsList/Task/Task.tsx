@@ -1,6 +1,6 @@
 import React, { ChangeEvent, memo } from 'react'
 import styles from '../../../app/App.module.css'
-import { deleteTaskTC, tasksThunks } from '../tasksSlice'
+import { tasksThunks } from '../tasksSlice'
 import { Checkbox } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -19,7 +19,7 @@ type TaskPropsType = {
 const Task: React.FC<TaskPropsType> = memo(({ todolistId, task, entityStatus }) => {
     const dispatch = useAppDispatch()
     const removeTaskHandler = () => {
-        dispatch(deleteTaskTC(todolistId, task.id))
+        dispatch(tasksThunks.deleteTask({ todolistId, taskId: task.id }))
     }
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.value.length < 101) {

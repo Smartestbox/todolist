@@ -1,18 +1,22 @@
-import { todolistsActions, todolistsReducer, TodolistType } from '../todolistsSlice'
+import { todolistsActions, todolistsReducer, todolistsThunks, TodolistType } from '../todolistsSlice'
 import { tasksReducer, TasksType } from '../tasksSlice'
 
 test('ids should be equals', () => {
     const startTasksState: TasksType = {}
     const startTodolistsState: TodolistType[] = []
 
-    const action = todolistsActions.addTodolist({
-        todolist: {
-            id: '3',
-            title: 'New todolist',
-            addedDate: '',
-            order: 0,
+    const action = todolistsThunks.createTodolist.fulfilled(
+        {
+            todolist: {
+                id: '3',
+                title: 'New todolist',
+                addedDate: '',
+                order: 0,
+            },
         },
-    })
+        'request',
+        { title: 'New todolist' },
+    )
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodolistsState = todolistsReducer(startTodolistsState, action)

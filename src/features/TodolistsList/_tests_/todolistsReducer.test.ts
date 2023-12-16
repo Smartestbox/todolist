@@ -1,5 +1,5 @@
 import { v1 } from 'uuid'
-import { todolistsActions, todolistsReducer, TodolistType } from '../todolistsSlice'
+import { todolistsActions, todolistsReducer, todolistsThunks, TodolistType } from '../todolistsSlice'
 
 let todolistId1: string
 let todolistId2: string
@@ -31,7 +31,9 @@ beforeEach(() => {
 })
 
 test('correct todolist should be removed', () => {
-    const action = todolistsActions.deleteTodolist({ todolistId: todolistId1 })
+    const action = todolistsThunks.deleteTodolist.fulfilled({ todolistId: todolistId1 }, 'request', {
+        todolistId: todolistId1,
+    })
 
     const endState: TodolistType[] = todolistsReducer(startState, action)
 
@@ -40,14 +42,18 @@ test('correct todolist should be removed', () => {
 })
 
 test('correct todolist should be added', () => {
-    const action = todolistsActions.addTodolist({
-        todolist: {
-            id: '3',
-            title: 'New todolist',
-            addedDate: '',
-            order: 0,
+    const action = todolistsThunks.createTodolist.fulfilled(
+        {
+            todolist: {
+                id: '3',
+                title: 'New todolist',
+                addedDate: '',
+                order: 0,
+            },
         },
-    })
+        'request',
+        { title: 'New todolist' },
+    )
 
     const endState: TodolistType[] = todolistsReducer(startState, action)
 
@@ -57,7 +63,11 @@ test('correct todolist should be added', () => {
 })
 
 test('correct title of todolist should be changed', () => {
-    const action = todolistsActions.changeTodolistTitle({ todolistId: todolistId1, title: 'New title' })
+    const action = todolistsThunks.changeTodolistTitle.fulfilled(
+        { todolistId: todolistId1, title: 'New title' },
+        'request',
+        { todolistId: todolistId1, title: 'New title' },
+    )
 
     const endState: TodolistType[] = todolistsReducer(startState, action)
 
@@ -75,7 +85,7 @@ test('correct filter of todolist should be changed', () => {
 })
 
 test('todolists should be set to the state', () => {
-    const action = todolistsActions.setTodolists({ todolists: startState })
+    const action = todolistsThunks.fetchTodolists.fulfilled({ todolists: startState }, 'request')
 
     const endState: TodolistType[] = todolistsReducer([], action)
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { createTodolistTC, fetchTodolistsTC, TodolistType } from './todolistsSlice'
+import { todolistsThunks, TodolistType } from './todolistsSlice'
 import Grid from '@mui/material/Grid'
 import { Paper } from '@mui/material'
 import Todolist from './Todolist/Todolist'
@@ -19,12 +19,12 @@ export const TodolistsList: React.FC = () => {
 
     useEffect(() => {
         if (!isLoggedIn) return
-        dispatch(fetchTodolistsTC())
-    }, [])
+        dispatch(todolistsThunks.fetchTodolists())
+    }, [isLoggedIn])
 
     const addTodolist = useCallback(
         (title: string) => {
-            dispatch(createTodolistTC(title))
+            dispatch(todolistsThunks.createTodolist({ title }))
         },
         [dispatch],
     )

@@ -1,6 +1,6 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { tasksThunks, TaskType } from '../tasksSlice'
-import { deleteTodolistTC, TodolistType, changeTodolistTitleTC, todolistsActions } from '../todolistsSlice'
+import { TodolistType, todolistsActions, todolistsThunks } from '../todolistsSlice'
 import Task from '../Task/Task'
 import { Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -24,20 +24,24 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
 
     const dispatch = useAppDispatch()
 
+    useEffect(() => {
+        dispatch(tasksThunks.fetchTasks(id))
+    }, [id])
+
     const addItemHandler = useCallback(
         (title: string) => {
             dispatch(tasksThunks.addTask({ todolistId: id, title }))
         },
-        [dispatch],
+        [id],
     )
 
     const onRemoveTodoHandler = () => {
-        dispatch(deleteTodolistTC(id))
+        dispatch(todolistsThunks.deleteTodolist({ todolistId: id }))
     }
 
     const changeTodolistTitleHandler = useCallback(
         (title: string) => {
-            dispatch(changeTodolistTitleTC(id, title))
+            dispatch(todolistsThunks.changeTodolistTitle({ todolistId: id, title }))
         },
         [dispatch, id],
     )
