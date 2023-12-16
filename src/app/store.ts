@@ -1,10 +1,10 @@
 import { AnyAction } from 'redux'
-import { todolistsReducer } from '../features/TodolistsList/todolists-reducer'
-import { tasksReducer } from '../features/TodolistsList/tasks-reducer'
 import { ThunkAction } from 'redux-thunk'
-import { authReducer } from '../features/Login/auth-reducer'
 import { configureStore } from '@reduxjs/toolkit'
-import { appReducer } from './app-reducer'
+import { appReducer } from 'app/appSlice'
+import { todolistsReducer } from 'features/TodolistsList/todolistsSlice'
+import { tasksReducer } from 'features/TodolistsList/tasksSlice'
+import { authReducer } from 'features/auth/model/authSlice'
 
 export const store = configureStore({
     reducer: {

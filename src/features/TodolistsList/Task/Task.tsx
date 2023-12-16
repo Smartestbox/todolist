@@ -1,13 +1,14 @@
 import React, { ChangeEvent, memo } from 'react'
 import styles from '../../../app/App.module.css'
-import EditableSpan from '../../../common/components/EditableSpan/EditableSpan'
-import { deleteTaskTC, tasksThunks } from '../tasks-reducer'
+import { deleteTaskTC, tasksThunks } from '../tasksSlice'
 import { Checkbox } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { TaskDomainType, TaskStatuses } from '../../../api/todolist-api'
-import { AppStatusesType } from '../../../app/app-reducer'
-import { useAppDispatch } from '../../../common/hooks/useAppDispath'
+import { AppStatusesType } from 'app/appSlice'
+import { useAppDispatch } from 'common/hooks/useAppDispatch'
+import { EditableSpan } from 'common/components'
+import { TaskStatuses } from 'common/enums'
+import { TaskDomainType } from 'features/TodolistsList/api/todolistsList.api.types'
 
 type TaskPropsType = {
     todolistId: string

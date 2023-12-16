@@ -1,4 +1,4 @@
-import { authActions, AuthInitialState, authReducer } from './auth-reducer'
+import { authActions, AuthInitialState, authReducer } from 'features/auth/model/authSlice'
 
 let initialState: AuthInitialState
 

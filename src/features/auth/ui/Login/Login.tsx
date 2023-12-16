@@ -3,20 +3,14 @@ import Grid from '@mui/material/Grid'
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel } from '@mui/material'
 import TextField from '@mui/material/TextField/TextField'
 import { useFormik } from 'formik'
-import { loginTC } from './auth-reducer'
+import { loginTC } from 'features/auth/model/authSlice'
 import { Navigate } from 'react-router-dom'
-import { useAppDispatch } from '../../common/hooks/useAppDispath'
-import { useAppSelector } from '../../common/hooks/useAppSelector'
+import { useAppDispatch } from 'common/hooks/useAppDispatch'
+import { useAppSelector } from 'common/hooks'
 
 type FormikErrorsType = {
     email?: string
     password?: string
-}
-
-export type LoginDataType = {
-    email: string
-    password: string
-    rememberMe: boolean
 }
 
 export const Login = () => {

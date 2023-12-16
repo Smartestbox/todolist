@@ -1,12 +1,14 @@
-import { TasksFiltersType } from '../../app/App'
-import { RESULT_CODE, todolistAPI, TodolistDomainType } from '../../api/todolist-api'
-import { AppThunk } from '../../app/store'
-import { appActions, AppStatusesType } from '../../app/app-reducer'
-import { handleServerNetworkError } from '../../common/utils/handleServerNetworkError'
+import { TasksFiltersType } from 'app/App'
+import { AppThunk } from 'app/store'
+import { appActions, AppStatusesType } from 'app/appSlice'
+import { handleServerNetworkError } from 'common/utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { clearTasksAndTodolists } from '../../common/actions/common-actions'
-import { tasksThunks } from './tasks-reducer'
-import { handleServerAppError } from '../../common/utils/handleServerAppError'
+import { clearTasksAndTodolists } from 'common/actions/commonActions'
+import { tasksThunks } from './tasksSlice'
+import { handleServerAppError } from 'common/utils'
+import { TodolistDomainType } from 'features/TodolistsList/api/todolistsList.api.types'
+import { todolistAPI } from 'features/TodolistsList/api/todolistsListApi'
+import { RESULT_CODE } from 'common/enums'
 
 const slice = createSlice({
     name: 'todolists',

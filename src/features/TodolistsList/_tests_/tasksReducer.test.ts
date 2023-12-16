@@ -1,6 +1,6 @@
-import { tasksActions, tasksReducer, tasksThunks, TasksType, TaskWithOnlyUpdatedFieldsType } from './tasks-reducer'
-import { TaskPriorities, TaskStatuses } from '../../api/todolist-api'
-import { todolistsActions } from './todolists-reducer'
+import { tasksActions, tasksReducer, tasksThunks, TasksType } from '../tasksSlice'
+import { TaskPriorities, TaskStatuses } from 'common/enums'
+import { todolistsActions } from '../todolistsSlice'
 
 let todolistId1: string
 let todolistId2: string

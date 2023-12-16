@@ -1,5 +1,5 @@
 import { v1 } from 'uuid'
-import { todolistsActions, todolistsReducer, TodolistType } from './todolists-reducer'
+import { todolistsActions, todolistsReducer, TodolistType } from '../todolistsSlice'
 
 let todolistId1: string
 let todolistId2: string

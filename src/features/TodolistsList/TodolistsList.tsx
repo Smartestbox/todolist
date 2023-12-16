@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect } from 'react'
-import { createTodolistTC, fetchTodolistsTC, TodolistType } from './todolists-reducer'
+import { createTodolistTC, fetchTodolistsTC, TodolistType } from './todolistsSlice'
 import Grid from '@mui/material/Grid'
 import { Paper } from '@mui/material'
 import Todolist from './Todolist/Todolist'
 import styles from '../../app/App.module.css'
-import AddItemForm from '../../common/components/AddItemForm/AddItemForm'
 import { Navigate } from 'react-router-dom'
-import { selectIsLoggedIn } from '../Login/auth-selectors'
-import { selectTodolists } from './todolists-selectors'
-import { useAppSelector } from '../../common/hooks/useAppSelector'
-import { useAppDispatch } from '../../common/hooks/useAppDispath'
+import { selectIsLoggedIn } from 'features/auth/model/authSelectors'
+import { selectTodolists } from './todolistsSelectors'
+import { useAppSelector } from 'common/hooks'
+import { useAppDispatch } from 'common/hooks/useAppDispatch'
+import { AddItemForm } from 'common/components'
 
-const TodolistsList: React.FC = () => {
+export const TodolistsList: React.FC = () => {
     const todolists = useAppSelector<TodolistType[]>(selectTodolists)
     const isLoggedIn = useAppSelector<boolean>(selectIsLoggedIn)
 
@@ -50,5 +50,3 @@ const TodolistsList: React.FC = () => {
         </div>
     )
 }
-
-export default TodolistsList

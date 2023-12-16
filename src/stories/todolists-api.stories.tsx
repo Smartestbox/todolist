@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { todolistAPI } from '../api/todolist-api'
+import { todolistAPI } from 'features/TodolistsList/api/todolistsListApi'
 
 export default {
     title: 'HTTP requests',

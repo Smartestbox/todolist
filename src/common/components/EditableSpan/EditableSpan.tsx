@@ -5,7 +5,7 @@ type EditableSpanType = {
     changeItemTitle: (title: string) => void
 }
 
-const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle }) => {
+export const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle }) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
 
@@ -41,5 +41,3 @@ const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle 
         <span onDoubleClick={onDoubleClickHandler}>{value}</span>
     )
 })
-
-export default EditableSpan
