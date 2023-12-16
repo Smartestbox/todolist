@@ -1,6 +1,6 @@
-import { AppDispatchType } from '../components/App/store'
-import { ResponseType } from '../api/todolist-api'
-import { appActions } from '../components/App/app-reducer'
+import { AppDispatchType } from '../../app/store'
+import { ResponseType } from '../../api/todolist-api'
+import { appActions } from '../../app/app-reducer'
 
 export const handleServerAppError = <D>(dispatch: AppDispatchType, data: ResponseType<D>) => {
     if (data.messages.length) {

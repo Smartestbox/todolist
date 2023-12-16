@@ -4,8 +4,9 @@ import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel }
 import TextField from '@mui/material/TextField/TextField'
 import { useFormik } from 'formik'
 import { loginTC } from './auth-reducer'
-import { useAppDispatch, useAppSelector } from '../../components/App/store'
 import { Navigate } from 'react-router-dom'
+import { useAppDispatch } from '../../common/hooks/useAppDispath'
+import { useAppSelector } from '../../common/hooks/useAppSelector'
 
 type FormikErrorsType = {
     email?: string

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { RootStateType, useAppDispatch, useAppSelector } from '../../components/App/store'
 import { createTodolistTC, fetchTodolistsTC, TodolistType } from './todolists-reducer'
 import Grid from '@mui/material/Grid'
 import { Paper } from '@mui/material'
 import Todolist from './Todolist/Todolist'
-import styles from '../../components/App/App.module.css'
-import AddItemForm from '../../components/AddItemForm/AddItemForm'
+import styles from '../../app/App.module.css'
+import AddItemForm from '../../common/components/AddItemForm/AddItemForm'
 import { Navigate } from 'react-router-dom'
 import { selectIsLoggedIn } from '../Login/auth-selectors'
 import { selectTodolists } from './todolists-selectors'
+import { useAppSelector } from '../../common/hooks/useAppSelector'
+import { useAppDispatch } from '../../common/hooks/useAppDispath'
 
 const TodolistsList: React.FC = () => {
     const todolists = useAppSelector<TodolistType[]>(selectTodolists)

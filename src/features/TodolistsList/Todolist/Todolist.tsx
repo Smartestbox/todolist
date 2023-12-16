@@ -1,7 +1,6 @@
 import React, { memo, useCallback } from 'react'
-import AddItemForm from '../../../components/AddItemForm/AddItemForm'
-import EditableSpan from '../../../components/EditableSpan/EditableSpan'
-import { useAppDispatch, useAppSelector } from '../../../components/App/store'
+import AddItemForm from '../../../common/components/AddItemForm/AddItemForm'
+import EditableSpan from '../../../common/components/EditableSpan/EditableSpan'
 import { tasksThunks, TaskType } from '../tasks-reducer'
 import { deleteTodolistTC, TodolistType, changeTodolistTitleTC, todolistsActions } from '../todolists-reducer'
 import Task from '../Task/Task'
@@ -10,8 +9,10 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from '@mui/material/IconButton'
 import styles from './Todolist.module.css'
 import { TaskStatuses } from '../../../api/todolist-api'
-import { AppStatusesType } from '../../../components/App/app-reducer'
+import { AppStatusesType } from '../../../app/app-reducer'
 import { selectTasks } from '../tasks-selectors'
+import { useAppSelector } from '../../../common/hooks/useAppSelector'
+import { useAppDispatch } from '../../../common/hooks/useAppDispath'
 
 type TodolistPropsType = {
     todolist: TodolistType
