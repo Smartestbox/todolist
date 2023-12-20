@@ -33,24 +33,24 @@ export const Login = () => {
                         formikHelpers.setFieldError(error.field, error.error)
                     })
                 })
-
-            formik.setSubmitting(false)
-            formik.resetForm()
+                .finally(() => {
+                    formik.setSubmitting(false)
+                })
         },
         validate: (values) => {
             const errors: FormikErrorsType = {}
 
-            // if (!values.email) {
-            //     errors.email = 'Required'
-            // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-            //     errors.email = 'Invalid email address'
-            // }
-            //
-            // if (!values.password) {
-            //     errors.password = 'Required'
-            // } else if (values.password.length < 5) {
-            //     errors.password = 'Password should contain at least 5 symbols'
-            // }
+            if (!values.email) {
+                errors.email = 'Required'
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Invalid email address'
+            }
+
+            if (!values.password) {
+                errors.password = 'Required'
+            } else if (values.password.length < 5) {
+                errors.password = 'Password should contain at least 5 symbols'
+            }
 
             return errors
         },
@@ -83,13 +83,11 @@ export const Login = () => {
                                 name="email"
                                 label="Email"
                                 margin="normal"
-                                // error={!!(formik.touched.email && formik.errors.email)}
-                                error={!!formik.errors.email}
+                                error={!!(formik.touched.email && formik.errors.email)}
                                 value={formik.values.email}
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
-                                // helperText={formik.touched.email && formik.errors.email}
-                                helperText={formik.errors.email}
+                                helperText={formik.touched.email && formik.errors.email}
                             />
 
                             <TextField
@@ -97,13 +95,11 @@ export const Login = () => {
                                 type="password"
                                 label="Password"
                                 margin="normal"
-                                // error={!!(formik.touched.password && formik.errors.password)}
-                                error={!!formik.errors.password}
+                                error={!!(formik.touched.password && formik.errors.password)}
                                 value={formik.values.password}
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
-                                // helperText={formik.touched.password && formik.errors.password}
-                                helperText={formik.errors.password}
+                                helperText={formik.touched.password && formik.errors.password}
                             />
                             <FormControlLabel
                                 label={'Remember me'}
