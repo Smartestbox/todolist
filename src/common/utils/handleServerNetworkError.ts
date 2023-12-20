@@ -1,4 +1,4 @@
-import { appActions } from '../../app/appSlice'
+import { appActions } from 'app/model/appSlice'
 import { AppDispatchType } from '../../app/store'
 import axios from 'axios'
 

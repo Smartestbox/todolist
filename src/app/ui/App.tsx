@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react'
-import styles from './App.module.css'
+import styles from 'app/App.module.css'
 import { AppBar, Button, CircularProgress, LinearProgress, Toolbar } from '@mui/material'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
-import { selectAppIsInitialized, selectAppStatus } from './appSelectors'
-import { AppStatusesType } from './appSlice'
-import { logoutTC, meTC } from 'features/auth/model/authSlice'
+import { selectAppIsInitialized, selectAppStatus } from 'app/model/appSelectors'
+import { AppStatusesType } from 'app/model/appSlice'
 import { selectIsLoggedIn } from 'features/auth/model/authSelectors'
 import { useAppDispatch, useAppSelector } from 'common/hooks'
 import { ErrorSnackbar } from 'common/components'
-import { Login, TodolistsList } from 'features'
+import { Login } from 'features/auth'
+import { authThunks } from 'features/auth/model/authSlice'
+import { TodolistsList } from 'features'
 
-export type TasksFiltersType = 'All' | 'Completed' | 'Active'
-
-const App = () => {
+export const App = () => {
     const status = useAppSelector<AppStatusesType>(selectAppStatus)
     const isInitialized = useAppSelector<boolean>(selectAppIsInitialized)
     const isLoggedIn = useAppSelector(selectIsLoggedIn)
@@ -22,11 +21,11 @@ const App = () => {
     const dispatch = useAppDispatch()
 
     const logout = () => {
-        dispatch(logoutTC())
+        dispatch(authThunks.logout())
     }
 
     useEffect(() => {
-        dispatch(meTC())
+        dispatch(authThunks.initializeApp())
     }, [])
 
     if (!isInitialized) {
@@ -72,5 +71,3 @@ const App = () => {
         </div>
     )
 }
-
-export default App

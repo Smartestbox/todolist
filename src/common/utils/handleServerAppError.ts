@@ -1,12 +1,17 @@
 import { AppDispatchType } from 'app/store'
-import { appActions } from 'app/appSlice'
-import { ResponseType } from 'common/types/responseType'
+import { appActions } from 'app/model/appSlice'
+import { BaseResponseType } from 'common/types/BaseResponseType'
 
-export const handleServerAppError = <D>(dispatch: AppDispatchType, data: ResponseType<D>) => {
-    if (data.messages.length) {
-        dispatch(appActions.setAppError({ error: data.messages[0] }))
-    } else {
-        dispatch(appActions.setAppError({ error: 'unknown error has occurred' }))
+export const handleServerAppError = <D>(
+    dispatch: AppDispatchType,
+    data: BaseResponseType<D>,
+    showGlobalError = true,
+) => {
+    if (showGlobalError) {
+        dispatch(
+            appActions.setAppError({ error: data.messages.length ? data.messages[0] : 'unknown error has occurred' }),
+        )
     }
+
     dispatch(appActions.setAppStatus({ status: 'failed' }))
 }

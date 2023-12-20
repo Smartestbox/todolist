@@ -1,5 +1,5 @@
 import { TaskPriorities, TaskStatuses } from 'common/enums'
-import { ResponseType } from 'common/types/responseType'
+import { BaseResponseType } from 'common/types/BaseResponseType'
 
 export type TaskDomainType = {
     id: string
@@ -27,7 +27,7 @@ export type TodolistDomainType = {
     order: number
 }
 
-export type UpdateTodolistResponseType = ResponseType & {
+export type UpdateTodolistResponseType = BaseResponseType & {
     fieldsErrors: string[]
 }
-export type CreateTodolistResponseType = ResponseType<{ item: TodolistDomainType }>
+export type CreateTodolistResponseType = BaseResponseType<{ item: TodolistDomainType }>

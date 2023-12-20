@@ -1,2 +1,1 @@
-export { Login } from 'features/auth/ui/Login/Login'
-export { TodolistsList } from './TodolistsList/TodolistsList'
+export { TodolistsList } from 'features/TodolistsList/ui/TodolistsList'

@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect } from 'react'
-import { todolistsThunks, TodolistType } from './todolistsSlice'
+import { todolistsThunks, TodolistType } from 'features/TodolistsList/model/todolistsSlice'
 import Grid from '@mui/material/Grid'
 import { Paper } from '@mui/material'
-import Todolist from './Todolist/Todolist'
-import styles from '../../app/App.module.css'
+import Todolist from 'features/TodolistsList/Todolist/Todolist'
+import styles from 'app/App.module.css'
 import { Navigate } from 'react-router-dom'
 import { selectIsLoggedIn } from 'features/auth/model/authSelectors'
-import { selectTodolists } from './todolistsSelectors'
+import { selectTodolists } from 'features/TodolistsList/model/todolistsSelectors'
 import { useAppSelector } from 'common/hooks'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { AddItemForm } from 'common/components'
@@ -20,7 +20,7 @@ export const TodolistsList: React.FC = () => {
     useEffect(() => {
         if (!isLoggedIn) return
         dispatch(todolistsThunks.fetchTodolists())
-    }, [isLoggedIn])
+    }, [])
 
     const addTodolist = useCallback(
         (title: string) => {

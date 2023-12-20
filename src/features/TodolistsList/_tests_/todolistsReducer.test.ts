@@ -1,5 +1,10 @@
 import { v1 } from 'uuid'
-import { todolistsActions, todolistsReducer, todolistsThunks, TodolistType } from '../todolistsSlice'
+import {
+    todolistsActions,
+    todolistsReducer,
+    todolistsThunks,
+    TodolistType,
+} from 'features/TodolistsList/model/todolistsSlice'
 
 let todolistId1: string
 let todolistId2: string
@@ -85,7 +90,7 @@ test('correct filter of todolist should be changed', () => {
 })
 
 test('todolists should be set to the state', () => {
-    const action = todolistsThunks.fetchTodolists.fulfilled({ todolists: startState }, 'request')
+    const action = todolistsThunks.fetchTodolists.fulfilled({ todolists: startState }, 'request', undefined)
 
     const endState: TodolistType[] = todolistsReducer([], action)
 

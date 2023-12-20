@@ -1,13 +1,12 @@
-import { appActions, AppStatusesType } from 'app/appSlice'
-import { handleServerNetworkError } from 'common/utils'
+import { appActions, AppStatusesType } from 'app/model/appSlice'
+import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from 'common/utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { todolistsThunks } from './todolistsSlice'
+import { todolistsThunks } from 'features/TodolistsList/model/todolistsSlice'
 import { clearTasksAndTodolists } from 'common/actions/commonActions'
-import { createAppAsyncThunk } from 'common/utils'
-import { handleServerAppError } from 'common/utils'
 import { todolistAPI } from 'features/TodolistsList/api/todolistsListApi'
 import { TaskDomainType } from 'features/TodolistsList/api/todolistsList.api.types'
 import { RESULT_CODE, TaskPriorities, TaskStatuses } from 'common/enums'
+import { thunkTryCatch } from 'common/utils/thunkTryCatch'
 
 // Thunks
 const fetchTasks = createAppAsyncThunk<{ todolistId: string; tasks: TaskDomainType[] }, string>(
@@ -26,7 +25,7 @@ const fetchTasks = createAppAsyncThunk<{ todolistId: string; tasks: TaskDomainTy
     },
 )
 
-const addTask = createAppAsyncThunk<{ task: TaskDomainType }, { todolistId: string; title: string }>(
+const _addTask = createAppAsyncThunk<{ task: TaskDomainType }, { todolistId: string; title: string }>(
     'tasks/addTask',
     async (arg, thunkAPI) => {
         const { dispatch, rejectWithValue } = thunkAPI
@@ -44,6 +43,25 @@ const addTask = createAppAsyncThunk<{ task: TaskDomainType }, { todolistId: stri
             handleServerNetworkError(dispatch, e)
             return rejectWithValue(null)
         }
+    },
+)
+
+const addTask = createAppAsyncThunk<{ task: TaskDomainType }, { todolistId: string; title: string }>(
+    'tasks/addTask',
+    async (arg, thunkAPI) => {
+        const { dispatch, rejectWithValue } = thunkAPI
+
+        return thunkTryCatch(thunkAPI, async () => {
+            const res = await todolistAPI.createTask(arg.todolistId, arg.title)
+
+            if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+                const task = res.data.data.item
+                return { task }
+            } else {
+                handleServerAppError(dispatch, res.data)
+                return rejectWithValue(null)
+            }
+        })
     },
 )
 

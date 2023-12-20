@@ -1,6 +1,6 @@
-import { tasksActions, tasksReducer, tasksThunks, TasksType } from '../tasksSlice'
+import { tasksActions, tasksReducer, tasksThunks, TasksType } from 'features/TodolistsList/model/tasksSlice'
 import { TaskPriorities, TaskStatuses } from 'common/enums'
-import { todolistsThunks } from '../todolistsSlice'
+import { todolistsThunks } from 'features/TodolistsList/model/todolistsSlice'
 
 let todolistId1: string
 let todolistId2: string
@@ -240,6 +240,7 @@ test('when todolists set, empty tasks should be added', () => {
             ],
         },
         'request',
+        undefined,
     )
 
     const endState: TasksType = tasksReducer({}, action)

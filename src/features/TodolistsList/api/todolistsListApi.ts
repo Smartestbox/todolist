@@ -1,5 +1,5 @@
 import { instance } from 'common/api/instance'
-import { ResponseType } from 'common/types/responseType'
+import { BaseResponseType } from 'common/types/BaseResponseType'
 import {
     CreateTodolistResponseType,
     GetTasksResponseType,
@@ -16,7 +16,7 @@ export const todolistAPI = {
         return instance.post<CreateTodolistResponseType>('todo-lists', { title })
     },
     deleteTodolist(todolistId: string) {
-        return instance.delete<ResponseType>(`todo-lists/${todolistId}`)
+        return instance.delete<BaseResponseType>(`todo-lists/${todolistId}`)
     },
     updateTodolist(todolistId: string, title: string) {
         return instance.put<UpdateTodolistResponseType>(`todo-lists/${todolistId}`, { title })
@@ -25,12 +25,15 @@ export const todolistAPI = {
         return instance.get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<ResponseType<{ item: TaskDomainType }>>(`/todo-lists/${todolistId}/tasks`, { title })
+        return instance.post<BaseResponseType<{ item: TaskDomainType }>>(`/todo-lists/${todolistId}/tasks`, { title })
     },
     deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+        return instance.delete<BaseResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, task: TaskDomainType) {
-        return instance.put<ResponseType<{ item: TaskDomainType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, task)
+        return instance.put<BaseResponseType<{ item: TaskDomainType }>>(
+            `/todo-lists/${todolistId}/tasks/${taskId}`,
+            task,
+        )
     },
 }
