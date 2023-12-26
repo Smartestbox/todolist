@@ -1,11 +1,11 @@
-import React, { ChangeEvent, KeyboardEvent, memo, useState } from 'react'
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react'
 
-type EditableSpanType = {
+type Props = {
     title: string
     changeItemTitle: (title: string) => void
 }
 
-export const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeItemTitle }) => {
+export const EditableSpan = ({ title, changeItemTitle }: Props) => {
     const [editMode, setEditMode] = useState<boolean>(false)
     const [value, setValue] = useState<string>(title)
 
@@ -40,4 +40,4 @@ export const EditableSpan: React.FC<EditableSpanType> = memo(({ title, changeIte
     ) : (
         <span onDoubleClick={onDoubleClickHandler}>{value}</span>
     )
-})
+}

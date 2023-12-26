@@ -1,17 +1,17 @@
-import React, { ChangeEvent, KeyboardEvent, memo, useState } from 'react'
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react'
 import TextField from '@mui/material/TextField/TextField'
 import styles from './AddItemForm.module.css'
 import IconButton from '@mui/material/IconButton'
 import { AddBox } from '@mui/icons-material'
 
-export type AddItemFormType = {
+type Props = {
     label: string
     addItem: (title: string) => void
     fullWidth?: boolean
     disabled?: boolean
 }
 
-export const AddItemForm: React.FC<AddItemFormType> = memo(({ label, addItem, disabled }) => {
+export const AddItemForm = ({ label, addItem, disabled }: Props) => {
     const [value, setValue] = useState<string>('')
     const [error, setError] = useState<boolean>(false)
 
@@ -62,4 +62,4 @@ export const AddItemForm: React.FC<AddItemFormType> = memo(({ label, addItem, di
             </IconButton>
         </div>
     )
-})
+}

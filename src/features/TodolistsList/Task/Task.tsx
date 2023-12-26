@@ -1,6 +1,6 @@
-import React, { ChangeEvent, memo } from 'react'
+import React, { ChangeEvent } from 'react'
 import styles from '../../../app/App.module.css'
-import { tasksThunks } from 'features/TodolistsList/model/tasksSlice'
+import { tasksThunks } from 'features/TodolistsList/model/tasks/tasksSlice'
 import { Checkbox } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -8,16 +8,17 @@ import { AppStatusesType } from 'app/model/appSlice'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { EditableSpan } from 'common/components'
 import { TaskStatuses } from 'common/enums'
-import { TaskDomainType } from 'features/TodolistsList/api/todolistsList.api.types'
+import { TaskDomainType } from 'features/TodolistsList/api/tasks/tasks.api.types'
 
-type TaskPropsType = {
+type Props = {
     todolistId: string
     task: TaskDomainType
     entityStatus: AppStatusesType
 }
 
-const Task: React.FC<TaskPropsType> = memo(({ todolistId, task, entityStatus }) => {
+const Task = ({ todolistId, task, entityStatus }: Props) => {
     const dispatch = useAppDispatch()
+
     const removeTaskHandler = () => {
         dispatch(tasksThunks.deleteTask({ todolistId, taskId: task.id }))
     }
@@ -58,6 +59,6 @@ const Task: React.FC<TaskPropsType> = memo(({ todolistId, task, entityStatus }) 
             </IconButton>
         </li>
     )
-})
+}
 
 export default Task

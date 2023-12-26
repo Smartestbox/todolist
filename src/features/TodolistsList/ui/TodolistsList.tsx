@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect } from 'react'
-import { todolistsThunks, TodolistType } from 'features/TodolistsList/model/todolistsSlice'
+import React, { useEffect } from 'react'
+import { todolistsThunks, TodolistType } from 'features/TodolistsList/model/todolists/todolistsSlice'
 import Grid from '@mui/material/Grid'
 import { Paper } from '@mui/material'
 import Todolist from 'features/TodolistsList/Todolist/Todolist'
 import styles from 'app/App.module.css'
 import { Navigate } from 'react-router-dom'
 import { selectIsLoggedIn } from 'features/auth/model/authSelectors'
-import { selectTodolists } from 'features/TodolistsList/model/todolistsSelectors'
+import { selectTodolists } from 'features/TodolistsList/model/todolists/todolistsSelectors'
 import { useAppSelector } from 'common/hooks'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { AddItemForm } from 'common/components'
@@ -22,12 +22,9 @@ export const TodolistsList: React.FC = () => {
         dispatch(todolistsThunks.fetchTodolists())
     }, [])
 
-    const addTodolist = useCallback(
-        (title: string) => {
-            dispatch(todolistsThunks.createTodolist({ title }))
-        },
-        [dispatch],
-    )
+    const addTodolist = (title: string) => {
+        dispatch(todolistsThunks.createTodolist({ title }))
+    }
 
     if (!isLoggedIn) {
         return <Navigate to={'/login'} />

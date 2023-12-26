@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { todolistAPI } from 'features/TodolistsList/api/todolistsListApi'
+import { todolistsAPI } from 'features/TodolistsList/api/todolists/todolistsApi'
 
 export default {
     title: 'HTTP requests',
@@ -9,7 +9,7 @@ export const GetTodolists = () => {
     const [state, setState] = useState<any>(null)
 
     useEffect(() => {
-        todolistAPI.getTodolists().then((res) => {
+        todolistsAPI.getTodolists().then((res) => {
             setState(res)
         })
     }, [])
@@ -22,7 +22,7 @@ export const CreateTodolist = () => {
     const title = 'new title'
 
     useEffect(() => {
-        todolistAPI.createTodolist(title).then((res) => {
+        todolistsAPI.createTodolist(title).then((res) => {
             setState(res.data)
         })
     }, [])
@@ -35,7 +35,7 @@ export const DeleteTodolist = () => {
 
     useEffect(() => {
         const todolistId = '0a466137-6d99-4ec0-80f5-d3ebc117aa5f'
-        todolistAPI.deleteTodolist(todolistId).then((res) => {
+        todolistsAPI.deleteTodolist(todolistId).then((res) => {
             setState(res.data)
         })
     }, [])
@@ -50,7 +50,7 @@ export const UpdateTodolist = () => {
         const todolistId = 'a2f2f191-aceb-460e-9607-4c27c5a9e5df'
         const title = 'upd title 2'
 
-        todolistAPI.updateTodolist(todolistId, title).then((res) => {
+        todolistsAPI.updateTodolist(todolistId, title).then((res) => {
             setState(res.data)
         })
     }, [])

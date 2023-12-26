@@ -1,6 +1,6 @@
-import { tasksActions, tasksReducer, tasksThunks, TasksType } from 'features/TodolistsList/model/tasksSlice'
+import { tasksActions, tasksReducer, tasksThunks, TasksType } from 'features/TodolistsList/model/tasks/tasksSlice'
 import { TaskPriorities, TaskStatuses } from 'common/enums'
-import { todolistsThunks } from 'features/TodolistsList/model/todolistsSlice'
+import { todolistsThunks } from 'features/TodolistsList/model/todolists/todolistsSlice'
 
 let todolistId1: string
 let todolistId2: string

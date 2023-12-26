@@ -4,7 +4,7 @@ import {
     todolistsReducer,
     todolistsThunks,
     TodolistType,
-} from 'features/TodolistsList/model/todolistsSlice'
+} from 'features/TodolistsList/model/todolists/todolistsSlice'
 
 let todolistId1: string
 let todolistId2: string

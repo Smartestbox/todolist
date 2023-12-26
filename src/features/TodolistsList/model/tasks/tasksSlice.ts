@@ -1,48 +1,22 @@
 import { appActions, AppStatusesType } from 'app/model/appSlice'
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from 'common/utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { todolistsThunks } from 'features/TodolistsList/model/todolistsSlice'
+import { todolistsThunks } from 'features/TodolistsList/model/todolists/todolistsSlice'
 import { clearTasksAndTodolists } from 'common/actions/commonActions'
-import { todolistAPI } from 'features/TodolistsList/api/todolistsListApi'
-import { TaskDomainType } from 'features/TodolistsList/api/todolistsList.api.types'
 import { RESULT_CODE, TaskPriorities, TaskStatuses } from 'common/enums'
 import { thunkTryCatch } from 'common/utils/thunkTryCatch'
+import { tasksAPI } from 'features/TodolistsList/api/tasks/tasksApi'
+import { TaskDomainType } from 'features/TodolistsList/api/tasks/tasks.api.types'
 
 // Thunks
+
 const fetchTasks = createAppAsyncThunk<{ todolistId: string; tasks: TaskDomainType[] }, string>(
     'tasks/fetchTasks',
-    async (todolistId, thunkAPI) => {
-        const { dispatch, rejectWithValue } = thunkAPI
-        try {
-            dispatch(appActions.setAppStatus({ status: 'loading' }))
-            const res = await todolistAPI.getTasks(todolistId)
-            dispatch(appActions.setAppStatus({ status: 'completed' }))
-            return { todolistId, tasks: res.data.items }
-        } catch (e) {
-            handleServerNetworkError(dispatch, e)
-            return rejectWithValue(null)
-        }
-    },
-)
-
-const _addTask = createAppAsyncThunk<{ task: TaskDomainType }, { todolistId: string; title: string }>(
-    'tasks/addTask',
     async (arg, thunkAPI) => {
-        const { dispatch, rejectWithValue } = thunkAPI
-        try {
-            dispatch(appActions.setAppStatus({ status: 'loading' }))
-            const res = await todolistAPI.createTask(arg.todolistId, arg.title)
-            if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
-                dispatch(appActions.setAppStatus({ status: 'completed' }))
-                return { task: res.data.data.item }
-            } else {
-                handleServerAppError<{ item: TaskDomainType }>(dispatch, res.data)
-                return rejectWithValue(null)
-            }
-        } catch (e) {
-            handleServerNetworkError(dispatch, e)
-            return rejectWithValue(null)
-        }
+        return thunkTryCatch(thunkAPI, async () => {
+            const res = await tasksAPI.getTasks(arg)
+            return { todolistId: arg, tasks: res.data.items }
+        })
     },
 )
 
@@ -52,7 +26,7 @@ const addTask = createAppAsyncThunk<{ task: TaskDomainType }, { todolistId: stri
         const { dispatch, rejectWithValue } = thunkAPI
 
         return thunkTryCatch(thunkAPI, async () => {
-            const res = await todolistAPI.createTask(arg.todolistId, arg.title)
+            const res = await tasksAPI.createTask(arg.todolistId, arg.title)
 
             if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
                 const task = res.data.data.item
@@ -98,7 +72,7 @@ const updateTask = createAppAsyncThunk<
         let { entityStatus, ...taskForUpdate } = taskFromRedux
         taskForUpdate = { ...taskForUpdate, ...arg.taskModelWithOnlyUpdatedProperties }
 
-        const res = await todolistAPI.updateTask(arg.todolistId, arg.taskId, taskForUpdate)
+        const res = await tasksAPI.updateTask(arg.todolistId, arg.taskId, taskForUpdate)
 
         if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
             dispatch(appActions.setAppStatus({ status: 'completed' }))
@@ -141,7 +115,7 @@ const deleteTask = createAppAsyncThunk<{ todolistId: string; taskId: string }, {
                 }),
             )
 
-            const res = await todolistAPI.deleteTask(arg.todolistId, arg.taskId)
+            const res = await tasksAPI.deleteTask(arg.todolistId, arg.taskId)
 
             if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
                 dispatch(appActions.setAppStatus({ status: 'completed' }))

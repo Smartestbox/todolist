@@ -1,26 +1,8 @@
 import { instance } from 'common/api/instance'
 import { BaseResponseType } from 'common/types/BaseResponseType'
-import {
-    CreateTodolistResponseType,
-    GetTasksResponseType,
-    TaskDomainType,
-    TodolistDomainType,
-    UpdateTodolistResponseType,
-} from 'features/TodolistsList/api/todolistsList.api.types'
+import { GetTasksResponseType, TaskDomainType } from 'features/TodolistsList/api/tasks/tasks.api.types'
 
-export const todolistAPI = {
-    getTodolists() {
-        return instance.get<TodolistDomainType[]>('todo-lists')
-    },
-    createTodolist(title: string) {
-        return instance.post<CreateTodolistResponseType>('todo-lists', { title })
-    },
-    deleteTodolist(todolistId: string) {
-        return instance.delete<BaseResponseType>(`todo-lists/${todolistId}`)
-    },
-    updateTodolist(todolistId: string, title: string) {
-        return instance.put<UpdateTodolistResponseType>(`todo-lists/${todolistId}`, { title })
-    },
+export const tasksAPI = {
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks`)
     },

@@ -1,6 +1,6 @@
-import React, { memo, useCallback, useEffect } from 'react'
-import { tasksThunks, TaskType } from 'features/TodolistsList/model/tasksSlice'
-import { TodolistType, todolistsActions, todolistsThunks } from 'features/TodolistsList/model/todolistsSlice'
+import React, { useEffect } from 'react'
+import { tasksThunks, TaskType } from 'features/TodolistsList/model/tasks/tasksSlice'
+import { todolistsActions, todolistsThunks, TodolistType } from 'features/TodolistsList/model/todolists/todolistsSlice'
 import Task from '../Task/Task'
 import { Button } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -8,17 +8,17 @@ import IconButton from '@mui/material/IconButton'
 import styles from './Todolist.module.css'
 import { TaskStatuses } from 'common/enums'
 import { AppStatusesType } from 'app/model/appSlice'
-import { selectTasks } from 'features/TodolistsList/model/tasksSelectors'
+import { selectTasks } from 'features/TodolistsList/model/tasks/tasksSelectors'
 import { useAppSelector } from 'common/hooks'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
 import { AddItemForm, EditableSpan } from 'common/components'
 
-type TodolistPropsType = {
+type Props = {
     todolist: TodolistType
     entityStatus: AppStatusesType
 }
 
-const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) => {
+const Todolist = ({ todolist, entityStatus }: Props) => {
     const { id, title, filter } = todolist
     const tasks = useAppSelector(selectTasks(id))
 
@@ -28,23 +28,16 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
         dispatch(tasksThunks.fetchTasks(id))
     }, [id])
 
-    const addItemHandler = useCallback(
-        (title: string) => {
-            dispatch(tasksThunks.addTask({ todolistId: id, title }))
-        },
-        [id],
-    )
-
+    const addItemHandler = (title: string) => {
+        dispatch(tasksThunks.addTask({ todolistId: id, title }))
+    }
     const onRemoveTodoHandler = () => {
         dispatch(todolistsThunks.deleteTodolist({ todolistId: id }))
     }
 
-    const changeTodolistTitleHandler = useCallback(
-        (title: string) => {
-            dispatch(todolistsThunks.changeTodolistTitle({ todolistId: id, title }))
-        },
-        [dispatch, id],
-    )
+    const changeTodolistTitleHandler = (title: string) => {
+        dispatch(todolistsThunks.changeTodolistTitle({ todolistId: id, title }))
+    }
 
     const onAllFilterHandler = () => {
         dispatch(todolistsActions.changeTodolistFilter({ id, filter: 'All' }))
@@ -100,6 +93,6 @@ const Todolist: React.FC<TodolistPropsType> = memo(({ todolist, entityStatus }) 
             </div>
         </div>
     )
-})
+}
 
 export default Todolist
