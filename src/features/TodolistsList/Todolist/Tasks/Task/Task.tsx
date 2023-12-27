@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react'
-import styles from '../../../app/App.module.css'
+import styles from 'app/App.module.css'
 import { tasksThunks } from 'features/TodolistsList/model/tasks/tasksSlice'
 import { Checkbox } from '@mui/material'
 import IconButton from '@mui/material/IconButton'

@@ -1,17 +1,13 @@
 import React, { useEffect } from 'react'
-import { tasksThunks, TaskType } from 'features/TodolistsList/model/tasks/tasksSlice'
-import { todolistsActions, todolistsThunks, TodolistType } from 'features/TodolistsList/model/todolists/todolistsSlice'
-import Task from '../Task/Task'
-import { Button } from '@mui/material'
-import DeleteIcon from '@mui/icons-material/Delete'
-import IconButton from '@mui/material/IconButton'
+import { tasksThunks } from 'features/TodolistsList/model/tasks/tasksSlice'
+import { TodolistType } from 'features/TodolistsList/model/todolists/todolistsSlice'
 import styles from './Todolist.module.css'
-import { TaskStatuses } from 'common/enums'
 import { AppStatusesType } from 'app/model/appSlice'
-import { selectTasks } from 'features/TodolistsList/model/tasks/tasksSelectors'
-import { useAppSelector } from 'common/hooks'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { AddItemForm, EditableSpan } from 'common/components'
+import { AddItemForm } from 'common/components'
+import FilterTasksButtons from 'features/TodolistsList/Todolist/FilterTasksButtons/FilterTasksButtons'
+import { Tasks } from 'features/TodolistsList/Todolist/Tasks/Tasks'
+import { Title } from 'features/TodolistsList/Todolist/Title/Title'
 
 type Props = {
     todolist: TodolistType
@@ -20,7 +16,6 @@ type Props = {
 
 const Todolist = ({ todolist, entityStatus }: Props) => {
     const { id, title, filter } = todolist
-    const tasks = useAppSelector(selectTasks(id))
 
     const dispatch = useAppDispatch()
 
@@ -28,69 +23,21 @@ const Todolist = ({ todolist, entityStatus }: Props) => {
         dispatch(tasksThunks.fetchTasks(id))
     }, [id])
 
-    const addItemHandler = (title: string) => {
+    const addTaskHandler = (title: string) => {
         dispatch(tasksThunks.addTask({ todolistId: id, title }))
     }
-    const onRemoveTodoHandler = () => {
-        dispatch(todolistsThunks.deleteTodolist({ todolistId: id }))
-    }
-
-    const changeTodolistTitleHandler = (title: string) => {
-        dispatch(todolistsThunks.changeTodolistTitle({ todolistId: id, title }))
-    }
-
-    const onAllFilterHandler = () => {
-        dispatch(todolistsActions.changeTodolistFilter({ id, filter: 'All' }))
-    }
-
-    const onActiveFilterHandler = () => {
-        dispatch(todolistsActions.changeTodolistFilter({ id, filter: 'Active' }))
-    }
-
-    const onCompletedFilterHandler = () => {
-        dispatch(todolistsActions.changeTodolistFilter({ id, filter: 'Completed' }))
-    }
-
-    const tasksForTodo: TaskType[] =
-        filter === 'All'
-            ? tasks
-            : filter === 'Completed'
-              ? tasks.filter((t) => t.status === TaskStatuses.Completed)
-              : tasks.filter((t) => t.status === TaskStatuses.New)
 
     const isDisabled = entityStatus === 'loading'
 
     return (
         <div className={styles.todolist}>
-            <EditableSpan title={title} changeItemTitle={changeTodolistTitleHandler} />
-            <IconButton onClick={onRemoveTodoHandler} disabled={isDisabled}>
-                <DeleteIcon />
-            </IconButton>
-            <AddItemForm label="Add task" disabled={isDisabled} addItem={addItemHandler} />
-            {tasksForTodo.map((t) => {
-                return <Task key={t.id} todolistId={id} task={t} entityStatus={t.entityStatus} />
-            })}
-            <div>
-                <Button variant={filter === 'All' ? 'contained' : 'text'} size="small" onClick={onAllFilterHandler}>
-                    All
-                </Button>
-                <Button
-                    variant={filter === 'Active' ? 'contained' : 'text'}
-                    size="small"
-                    color="warning"
-                    onClick={onActiveFilterHandler}
-                >
-                    Active
-                </Button>
-                <Button
-                    variant={filter === 'Completed' ? 'contained' : 'text'}
-                    size="small"
-                    color="success"
-                    onClick={onCompletedFilterHandler}
-                >
-                    Completed
-                </Button>
-            </div>
+            <Title id={id} title={title} isDisabled={isDisabled} />
+
+            <AddItemForm label="Add task" disabled={isDisabled} addItem={addTaskHandler} />
+
+            <Tasks id={id} filter={filter} />
+
+            <FilterTasksButtons id={id} filter={filter} />
         </div>
     )
 }
