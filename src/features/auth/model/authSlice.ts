@@ -1,69 +1,47 @@
 import { authAPI, LoginDataType } from './../api/authApi'
-import { createSlice } from '@reduxjs/toolkit'
-import { appActions } from 'app/model/appSlice'
+import { AnyAction, createSlice, isAnyOf } from '@reduxjs/toolkit'
 import { clearTasksAndTodolists } from 'common/actions/commonActions'
-import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from 'common/utils'
+import { createAppAsyncThunk } from 'common/utils'
 import { RESULT_CODE } from 'common/enums'
-import { thunkTryCatch } from 'common/utils/thunkTryCatch'
+import { appActions } from 'app/model/appSlice'
 
-const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>('auth/me', async (arg, thunkAPI) => {
+const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>('auth/initializeApp', async (_, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-    return thunkTryCatch(thunkAPI, async () => {
-        const res = await authAPI.me()
 
-        if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
-            dispatch(appActions.setAppStatus({ status: 'completed' }))
-            return { isLoggedIn: true }
-        } else {
-            dispatch(appActions.setAppStatus({ status: 'failed' }))
-            return rejectWithValue(null)
-        }
-    }).finally(() => {
-        dispatch(appActions.setAppIsInitialized({ isInitialized: true }))
-    })
+    const res = await authAPI.me()
+
+    dispatch(appActions.setAppIsInitialized({ isInitialized: true }))
+
+    if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+        return { isLoggedIn: true }
+    } else {
+        return rejectWithValue(res.data)
+    }
 })
 
 const login = createAppAsyncThunk<{ isLoggedIn: boolean }, { loginData: LoginDataType }>(
     'auth/login',
     async (arg, thunkAPI) => {
-        const { dispatch, rejectWithValue } = thunkAPI
-        dispatch(appActions.setAppStatus({ status: 'loading' }))
-        try {
-            const res = await authAPI.login(arg.loginData)
+        const { rejectWithValue } = thunkAPI
+        const res = await authAPI.login(arg.loginData)
 
-            if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
-                dispatch(appActions.setAppStatus({ status: 'completed' }))
-                return { isLoggedIn: true }
-            } else {
-                const isShowAppError = !res.data.fieldsErrors.length
-                handleServerAppError(dispatch, res.data, isShowAppError)
-                return rejectWithValue(res.data)
-            }
-        } catch (e) {
-            handleServerNetworkError(dispatch, e)
-            return rejectWithValue(null)
+        if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+            return { isLoggedIn: true }
+        } else {
+            return rejectWithValue(res.data)
         }
     },
 )
 
-const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, void>('auth/logout', async (arg, thunkAPI) => {
+const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, void>('auth/logout', async (_, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-    try {
-        dispatch(appActions.setAppStatus({ status: 'loading' }))
+    const res = await authAPI.logout()
 
-        const res = await authAPI.logout()
-
-        if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
-            dispatch(appActions.setAppStatus({ status: 'completed' }))
-            dispatch(clearTasksAndTodolists())
-            return { isLoggedIn: false }
-        } else {
-            handleServerAppError(dispatch, res.data)
-            return rejectWithValue(null)
-        }
-    } catch (e) {
-        handleServerNetworkError(dispatch, e as { message: string })
-        return rejectWithValue(null)
+    if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+        dispatch(clearTasksAndTodolists())
+        return { isLoggedIn: false }
+    } else {
+        return rejectWithValue(res.data)
     }
 })
 
@@ -74,16 +52,12 @@ const slice = createSlice({
     },
     reducers: {},
     extraReducers: (builder) => {
-        builder
-            .addCase(login.fulfilled, (state, action) => {
+        builder.addMatcher(
+            isAnyOf(authThunks.login.fulfilled, authThunks.logout.fulfilled, authThunks.initializeApp.fulfilled),
+            (state, action: AnyAction) => {
                 state.isLoggedIn = action.payload.isLoggedIn
-            })
-            .addCase(initializeApp.fulfilled, (state, action) => {
-                state.isLoggedIn = action.payload.isLoggedIn
-            })
-            .addCase(logout.fulfilled, (state, action) => {
-                state.isLoggedIn = action.payload.isLoggedIn
-            })
+            },
+        )
     },
 })
 

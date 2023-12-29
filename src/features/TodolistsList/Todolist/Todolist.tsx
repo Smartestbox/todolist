@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import { tasksThunks } from 'features/TodolistsList/model/tasks/tasksSlice'
-import { TodolistType } from 'features/TodolistsList/model/todolists/todolistsSlice'
+import { todolistsThunks, TodolistType } from 'features/TodolistsList/model/todolists/todolistsSlice'
+import DeleteIcon from '@mui/icons-material/Delete'
+import IconButton from '@mui/material/IconButton'
 import styles from './Todolist.module.css'
 import { AppStatusesType } from 'app/model/appSlice'
 import { useAppDispatch } from 'common/hooks/useAppDispatch'
-import { AddItemForm } from 'common/components'
+import { AddItemForm, EditableSpan } from 'common/components'
 import FilterTasksButtons from 'features/TodolistsList/Todolist/FilterTasksButtons/FilterTasksButtons'
 import { Tasks } from 'features/TodolistsList/Todolist/Tasks/Tasks'
-import { Title } from 'features/TodolistsList/Todolist/Title/Title'
 
 type Props = {
     todolist: TodolistType
@@ -24,14 +25,25 @@ const Todolist = ({ todolist, entityStatus }: Props) => {
     }, [id])
 
     const addTaskHandler = (title: string) => {
-        dispatch(tasksThunks.addTask({ todolistId: id, title }))
+        return dispatch(tasksThunks.addTask({ todolistId: id, title })).unwrap()
+    }
+    const removeTodolistHandler = () => {
+        dispatch(todolistsThunks.deleteTodolist({ todolistId: id }))
+    }
+
+    const changeTodolistTitleHandler = (title: string) => {
+        dispatch(todolistsThunks.changeTodolistTitle({ todolistId: id, title }))
     }
 
     const isDisabled = entityStatus === 'loading'
 
     return (
         <div className={styles.todolist}>
-            <Title id={id} title={title} isDisabled={isDisabled} />
+            <EditableSpan title={title} changeItemTitle={changeTodolistTitleHandler} />
+
+            <IconButton onClick={removeTodolistHandler} disabled={isDisabled}>
+                <DeleteIcon />
+            </IconButton>
 
             <AddItemForm label="Add task" disabled={isDisabled} addItem={addTaskHandler} />
 

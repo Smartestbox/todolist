@@ -10,14 +10,6 @@ beforeEach(() => {
     }
 })
 
-test('status should be changed', () => {
-    const action = appActions.setAppStatus({ status: 'completed' })
-
-    const endState = appReducer(initialState, action)
-
-    expect(endState.status).toBe('completed')
-})
-
 test('error should be changed', () => {
     const action = appActions.setAppError({ error: 'some error' })
 

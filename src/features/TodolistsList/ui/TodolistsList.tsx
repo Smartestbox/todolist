@@ -23,7 +23,7 @@ export const TodolistsList: React.FC = () => {
     }, [])
 
     const addTodolist = (title: string) => {
-        dispatch(todolistsThunks.createTodolist({ title }))
+        return dispatch(todolistsThunks.createTodolist({ title })).unwrap()
     }
 
     if (!isLoggedIn) {
