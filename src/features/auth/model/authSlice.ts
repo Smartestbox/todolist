@@ -10,11 +10,11 @@ const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>('auth/i
 
     const res = await authAPI.me()
 
-    dispatch(appActions.setAppIsInitialized({ isInitialized: true }))
-
     if (res.data.resultCode === RESULT_CODE.SUCCEEDED) {
+        dispatch(appActions.setAppIsInitialized({ isInitialized: true }))
         return { isLoggedIn: true }
     } else {
+        dispatch(appActions.setAppIsInitialized({ isInitialized: true }))
         return rejectWithValue(res.data)
     }
 })
